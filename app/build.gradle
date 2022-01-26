@@ -35,8 +35,13 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        allWarningsAsErrors = false
         useIR = true
+
+        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+        freeCompilerArgs += '-Xopt-in=okio.ExperimentalFileSystem'
+
+        jvmTarget = '1.8'
     }
 
     buildFeatures {
