@@ -2,8 +2,7 @@ package io.ubyte.lethe.pages.data
 
 import io.ubyte.lethe.pages.model.Page
 import io.ubyte.lethe.pages.model.Platform
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import io.ubyte.lethe.util.AppCoroutineDispatchers
 import kotlinx.coroutines.withContext
 import okio.FileSystem
 import okio.Path
@@ -14,14 +13,14 @@ import javax.inject.Inject
 @Suppress("BlockingMethodInNonBlockingContext")
 class ZipFileHandler @Inject constructor(
     private val fileSystem: FileSystem,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: AppCoroutineDispatchers
 ) {
     private lateinit var zipFile: FileSystem
 
     suspend fun extractPages(
         path: Path,
         selectedPlatforms: Regex = Platform.all()
-    ): List<Page> = withContext(dispatcher) {
+    ): List<Page> = withContext(dispatcher.io) {
         zipFile = fileSystem.openZip(path)
 
         return@withContext zipFile.list(ROOT.toPath())

@@ -12,8 +12,9 @@ import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
 import io.ubyte.lethe.Database
-import io.ubyte.lethe.pages.data.ZipFileDownloader
-import io.ubyte.lethe.pages.data.ZipFileHandler
+import io.ubyte.lethe.util.AppCoroutineDispatchers
+import ioubyte.lethe.PageQueries
+import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
 import javax.inject.Singleton
 
@@ -22,16 +23,15 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
-    fun provideFileSystem() = FileSystem.SYSTEM
+    fun provideCoroutineDispatchers() = AppCoroutineDispatchers(
+        io = Dispatchers.IO,
+        computation = Dispatchers.Default,
+        main = Dispatchers.Main
+    )
 
     @Singleton
     @Provides
-    fun provideDownloader(fileSystem: FileSystem, httpClient: HttpClient): ZipFileDownloader {
-        return ZipFileDownloader(fileSystem, httpClient)
-    }
-
-    @Provides
-    fun provideZipFileHandler(fileSystem: FileSystem) = ZipFileHandler(fileSystem)
+    fun provideFileSystem() = FileSystem.SYSTEM
 
     @Singleton
     @Provides
@@ -42,5 +42,11 @@ object AppModule {
     fun provideDataBase(@ApplicationContext context: Context): Database {
         val driver: SqlDriver = AndroidSqliteDriver(Database.Schema, context, "man-pages.db")
         return Database(driver)
+    }
+
+    @Singleton
+    @Provides
+    fun providePageQueries(database: Database): PageQueries {
+        return database.pageQueries
     }
 }

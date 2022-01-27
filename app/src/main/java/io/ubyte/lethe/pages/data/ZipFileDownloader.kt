@@ -4,25 +4,26 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.utils.io.*
 import io.ktor.utils.io.jvm.javaio.*
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+import io.ubyte.lethe.util.AppCoroutineDispatchers
 import kotlinx.coroutines.withContext
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 @Suppress("BlockingMethodInNonBlockingContext")
 class ZipFileDownloader @Inject constructor(
     private val fileSystem: FileSystem,
     private val httpClient: HttpClient,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: AppCoroutineDispatchers
 ) {
     private val temporaryFile = (FileSystem.SYSTEM_TEMPORARY_DIRECTORY.toString() +
             Path.DIRECTORY_SEPARATOR +
             FILE_NAME).toPath()
 
-    suspend fun downloadFile(): Path = withContext(dispatcher) {
+    suspend fun downloadFile(): Path = withContext(dispatcher.io) {
         fileSystem.write(temporaryFile) {
             httpClient.use { client ->
                 client.get<ByteReadChannel>(ZIP_ASSET_URL)
