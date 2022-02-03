@@ -1,20 +1,30 @@
 package io.ubyte.lethe.pages.model
 
-import java.util.*
-
-enum class Platform(val flag: Int) {
-    COMMON(1),
-    LINUX(2),
-    OSX(4),
-    SUNOS(8),
-    WINDOWS(16),
-    ANDROID(32);
+enum class Platform {
+    Common,
+    Linux,
+    OSX,
+    SunOS,
+    Windows,
+    Android;
 
     companion object {
-        fun all() = values().toSet().toRegex()
+        fun allPlatforms() = values().toSet().toRegex()
+
+        fun formatFromLowercase(platform: String): String? {
+            return when (platform) {
+                Common.name.lowercase() -> Common.name
+                Linux.name.lowercase() -> Linux.name
+                OSX.name.lowercase() -> OSX.name
+                SunOS.name.lowercase() -> SunOS.name
+                Windows.name.lowercase() -> Windows.name
+                Android.name.lowercase() -> Android.name
+                else -> null
+            }
+        }
     }
 }
 
-fun Set<Platform>.toRegex() = joinToString("|") { platform ->
-    platform.name.lowercase(Locale.ROOT)
-}.toRegex()
+fun Set<Platform>.toRegex(): Regex {
+    return joinToString(separator = "|") { it.name }.toRegex(RegexOption.IGNORE_CASE)
+}
