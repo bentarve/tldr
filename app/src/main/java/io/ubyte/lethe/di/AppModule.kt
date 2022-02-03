@@ -12,8 +12,8 @@ import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
 import io.ubyte.lethe.Database
-import io.ubyte.lethe.util.AppCoroutineDispatchers
-import ioubyte.lethe.PageQueries
+import io.ubyte.lethe.PageQueries
+import io.ubyte.lethe.core.util.AppCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
 import javax.inject.Singleton

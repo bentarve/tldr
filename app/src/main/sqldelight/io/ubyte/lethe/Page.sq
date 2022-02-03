@@ -1,0 +1,47 @@
+CREATE TABLE page(
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  platform TEXT NOT NULL,
+  markdown TEXT NOT NULL
+);
+
+CREATE INDEX name_index ON page(name);
+CREATE INDEX platform_index ON page(platform);
+
+insertPage:
+INSERT OR FAIL INTO page(name, platform, markdown)
+VALUES (?, ?, ?);
+
+updatePage:
+UPDATE page
+SET name = ?1,
+  platform = ?2,
+  markdown = ?3
+WHERE name = ?1
+  AND platform = ?2;
+
+findPageId:
+SELECT id
+FROM page
+WHERE name = ?1
+  AND platform = ?2;
+
+findAllPageIds:
+SELECT id
+FROM page;
+
+allPages:
+SELECT *
+-- SELECT id, name, platform
+FROM page
+LIMIT :limit OFFSET :offset;
+
+deletePageIds:
+DELETE FROM page
+WHERE id IN ?;
+
+changes:
+SELECT changes();
+
+count:
+SELECT COUNT(id) FROM page;
