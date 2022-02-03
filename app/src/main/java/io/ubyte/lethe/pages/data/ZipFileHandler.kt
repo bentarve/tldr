@@ -34,7 +34,7 @@ class ZipFileHandler @Inject constructor(
         val pageContent = zipFile.read(path) { readUtf8().trim() }
 
         return Page(
-            name = pageContent.lines().first().removePrefix("#").trim(),
+            name = pageContent.substringBefore("\n").removePrefix("#").trim(),
             platform = requireNotNull(platform),
             markdown = pageContent
         )
