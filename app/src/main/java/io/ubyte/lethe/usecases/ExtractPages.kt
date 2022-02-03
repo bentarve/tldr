@@ -1,4 +1,4 @@
-package io.ubyte.lethe.pages.data
+package io.ubyte.lethe.usecases
 
 import io.ubyte.lethe.pages.model.Page
 import io.ubyte.lethe.pages.model.Platform
@@ -11,33 +11,31 @@ import okio.openZip
 import javax.inject.Inject
 
 @Suppress("BlockingMethodInNonBlockingContext")
-class ZipFileHandler @Inject constructor(
+class ExtractPages @Inject constructor(
     private val fileSystem: FileSystem,
     private val dispatchers: AppCoroutineDispatchers
 ) {
-    private lateinit var zipFile: FileSystem
-
-    suspend fun extractPages(
+    suspend operator fun invoke(
         path: Path,
         selectedPlatforms: Regex = Platform.allPlatforms()
     ): List<Page> = withContext(dispatchers.io) {
-        zipFile = fileSystem.openZip(path)
+        val zipFile = fileSystem.openZip(path)
+
+        fun toPage(path: Path): Page {
+            val platform = path.parent?.name?.let { Platform.formatFromLowercase(it) }
+            val pageContent = zipFile.read(path) { readUtf8().trim() }
+
+            return Page(
+                name = pageContent.substringBefore("\n").removePrefix("#").trim(),
+                platform = requireNotNull(platform),
+                markdown = pageContent
+            )
+        }
 
         return@withContext zipFile.list(ROOT.toPath())
             .filter { it.name matches selectedPlatforms }
             .flatMap(zipFile::list)
             .map(::toPage)
-    }
-
-    private fun toPage(path: Path): Page {
-        val platform = path.parent?.name?.let { Platform.formatFromLowercase(it) }
-        val pageContent = zipFile.read(path) { readUtf8().trim() }
-
-        return Page(
-            name = pageContent.substringBefore("\n").removePrefix("#").trim(),
-            platform = requireNotNull(platform),
-            markdown = pageContent
-        )
     }
 }
 

@@ -1,4 +1,4 @@
-package io.ubyte.lethe.pages.data
+package io.ubyte.lethe.usecases
 
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -14,16 +14,16 @@ import javax.inject.Singleton
 
 @Singleton
 @Suppress("BlockingMethodInNonBlockingContext")
-class ZipFileDownloader @Inject constructor(
+class DownloadPages @Inject constructor(
     private val fileSystem: FileSystem,
     private val httpClient: HttpClient,
     private val dispatchers: AppCoroutineDispatchers
 ) {
-    private val temporaryFile = (FileSystem.SYSTEM_TEMPORARY_DIRECTORY.toString() +
-            Path.DIRECTORY_SEPARATOR +
-            FILE_NAME).toPath()
+    suspend operator fun invoke(): Path = withContext(dispatchers.io) {
+        val temporaryFile = (FileSystem.SYSTEM_TEMPORARY_DIRECTORY.toString() +
+                Path.DIRECTORY_SEPARATOR +
+                FILE_NAME).toPath()
 
-    suspend fun downloadFile(): Path = withContext(dispatchers.io) {
         fileSystem.write(temporaryFile) {
             httpClient.use { client ->
                 client.get<ByteReadChannel>(ZIP_ASSET_URL)
