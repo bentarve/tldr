@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".App"
+        android:name=".LetheApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lethe">
         <activity
-            android:name=".ui.LetheActivity"
+            android:name="io.ubyte.lethe.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>

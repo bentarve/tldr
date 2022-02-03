@@ -1,4 +1,4 @@
-package io.ubyte.lethe.util
+package io.ubyte.lethe.core.util
 
 import kotlinx.coroutines.CoroutineDispatcher
 

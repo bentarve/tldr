@@ -1,9 +1,11 @@
-package io.ubyte.lethe.ui
+package io.ubyte.lethe
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,42 +13,40 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import io.ubyte.lethe.ui.LetheDestinations.HOME_ROUTE
-import io.ubyte.lethe.ui.LetheDestinations.PAGE_DETAIL_ROUTE
-import io.ubyte.lethe.ui.LetheDestinations.PAGE_NAME
-import io.ubyte.lethe.ui.LetheDestinations.SEARCH_ROUTE
-import io.ubyte.lethe.ui.home.Home
-import io.ubyte.lethe.ui.theme.LetheTheme
+import dagger.hilt.android.AndroidEntryPoint
+import io.ubyte.lethe.LetheDestinations.HOME_ROUTE
+import io.ubyte.lethe.LetheDestinations.PAGE_DETAIL_ROUTE
+import io.ubyte.lethe.LetheDestinations.PAGE_NAME
+import io.ubyte.lethe.LetheDestinations.SEARCH_ROUTE
+import io.ubyte.lethe.core.ui.theme.LetheTheme
+import io.ubyte.lethe.home.Home
 
-@Composable
-fun LetheApp() {
-    LetheTheme {
-        val navController: NavHostController = rememberNavController()
-        Scaffold { innerPadding ->
-            LetheNavHost(
-                navController,
-                Modifier.padding(innerPadding)
-            )
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            LetheTheme {
+                val navController: NavHostController = rememberNavController()
+                Surface {
+                    LetheNavHost(navController)
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun LetheNavHost(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-) {
+private fun LetheNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = HOME_ROUTE,
-        modifier = modifier
+        startDestination = HOME_ROUTE
     ) {
         composable(HOME_ROUTE) {
             Home(
-                onSearchClick = { },
-                onPageClick = { }
-//                onSearchClick = { navController.navigate(SEARCH_ROUTE)},
-//                onPageClick = { name -> navigateToPageDetail(navController, name) }
+                hiltViewModel(),
+                openSearch = { /* navController.navigate(SEARCH_ROUTE) */ },
+                openPageDetails = { /* name -> navigateToPageDetail(navController, name) */ }
             )
         }
         composable(SEARCH_ROUTE) {

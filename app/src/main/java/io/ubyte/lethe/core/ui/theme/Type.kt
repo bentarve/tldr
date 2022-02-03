@@ -1,4 +1,4 @@
-package io.ubyte.lethe.ui.theme
+package io.ubyte.lethe.core.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
