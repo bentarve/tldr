@@ -16,7 +16,7 @@ import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import io.ubyte.lethe.LetheDestinations.HOME_ROUTE
 import io.ubyte.lethe.LetheDestinations.PAGE_DETAIL_ROUTE
-import io.ubyte.lethe.LetheDestinations.PAGE_NAME
+import io.ubyte.lethe.LetheDestinations.PAGE_ID
 import io.ubyte.lethe.LetheDestinations.SEARCH_ROUTE
 import io.ubyte.lethe.core.ui.theme.LetheTheme
 import io.ubyte.lethe.home.Home
@@ -53,11 +53,11 @@ private fun LetheNavHost(navController: NavHostController) {
             // todo Search()
         }
         composable(
-            route = "${PAGE_DETAIL_ROUTE}/${PAGE_NAME}",
-            arguments = listOf(navArgument(PAGE_NAME) { type = NavType.StringType })
+            route = "${PAGE_DETAIL_ROUTE}/${PAGE_ID}",
+            arguments = listOf(navArgument(PAGE_ID) { type = NavType.LongType })
         ) { backStackEntry ->
             val arguments = requireNotNull(backStackEntry.arguments)
-            val pageName = arguments.getString(PAGE_NAME)
+            val pageName = arguments.getLong(PAGE_ID)
             // todo PageDetail(pageName, upPress)
         }
     }
@@ -71,5 +71,5 @@ object LetheDestinations {
     const val HOME_ROUTE = "home"
     const val SEARCH_ROUTE = "search"
     const val PAGE_DETAIL_ROUTE = "pageDetail"
-    const val PAGE_NAME = "name"
+    const val PAGE_ID = "pageId"
 }
