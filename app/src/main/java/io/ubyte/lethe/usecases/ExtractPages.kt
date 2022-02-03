@@ -1,7 +1,7 @@
 package io.ubyte.lethe.usecases
 
-import io.ubyte.lethe.pages.model.Page
-import io.ubyte.lethe.pages.model.Platform
+import io.ubyte.lethe.model.Page
+import io.ubyte.lethe.model.Platform
 import io.ubyte.lethe.core.util.AppCoroutineDispatchers
 import kotlinx.coroutines.withContext
 import okio.FileSystem

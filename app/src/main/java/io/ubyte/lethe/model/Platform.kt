@@ -1,4 +1,4 @@
-package io.ubyte.lethe.pages.model
+package io.ubyte.lethe.model
 
 enum class Platform {
     Common,

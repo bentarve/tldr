@@ -8,14 +8,14 @@ import io.ubyte.lethe.core.util.AppCoroutineDispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import io.ubyte.lethe.pages.model.Page as ModelPage
+import io.ubyte.lethe.model.Page as DomainPage
 
 @Singleton
 class PageStore @Inject constructor(
     private val db: PageQueries,
     private val dispatchers: AppCoroutineDispatchers
 ) {
-    suspend fun updatePages(pages: List<ModelPage>) = withContext(dispatchers.io) {
+    suspend fun updatePages(pages: List<DomainPage>) = withContext(dispatchers.io) {
         db.transaction {
             val ids = db.findAllPageIds().executeAsList().toMutableSet()
 

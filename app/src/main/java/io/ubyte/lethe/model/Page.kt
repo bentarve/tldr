@@ -1,4 +1,4 @@
-package io.ubyte.lethe.pages.model
+package io.ubyte.lethe.model
 
 data class Page(
     val name: String,
