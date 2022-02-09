@@ -30,6 +30,11 @@ findAllPageIds:
 SELECT id
 FROM page;
 
+findPage:
+SELECT name, platform, markdown
+FROM page
+WHERE id = ?;
+
 allPages:
 SELECT *
 -- SELECT id, name, platform

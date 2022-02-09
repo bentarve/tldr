@@ -6,20 +6,18 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
-import io.ubyte.lethe.LetheDestinations.HOME_ROUTE
-import io.ubyte.lethe.LetheDestinations.PAGE_DETAIL_ROUTE
-import io.ubyte.lethe.LetheDestinations.PAGE_ID
-import io.ubyte.lethe.LetheDestinations.SEARCH_ROUTE
+import io.ubyte.lethe.Destinations.HOME_ROUTE
+import io.ubyte.lethe.Destinations.PAGE_DETAILS_ROUTE
+import io.ubyte.lethe.Destinations.PAGE_ID
+import io.ubyte.lethe.Destinations.SEARCH_ROUTE
 import io.ubyte.lethe.core.ui.theme.LetheTheme
 import io.ubyte.lethe.home.Home
+import io.ubyte.lethe.pagedetails.PageDetails
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -46,30 +44,33 @@ private fun LetheNavHost(navController: NavHostController) {
             Home(
                 hiltViewModel(),
                 openSearch = { /* navController.navigate(SEARCH_ROUTE) */ },
-                openPageDetails = { /* name -> navigateToPageDetail(navController, name) */ }
+                openPageDetails = { pageId -> navigateToPageDetail(navController, pageId) }
             )
         }
         composable(SEARCH_ROUTE) {
             // todo Search()
         }
         composable(
-            route = "${PAGE_DETAIL_ROUTE}/${PAGE_ID}",
-            arguments = listOf(navArgument(PAGE_ID) { type = NavType.LongType })
-        ) { backStackEntry ->
-            val arguments = requireNotNull(backStackEntry.arguments)
-            val pageName = arguments.getLong(PAGE_ID)
-            // todo PageDetail(pageName, upPress)
+            route = PAGE_DETAILS_ROUTE with PAGE_ID,
+            arguments = listOf(navArgument(PAGE_ID) { type = NavType.LongType }),
+        ) {
+            PageDetails(
+                hiltViewModel(),
+                navController::navigateUp
+            )
         }
     }
 }
 
-private fun navigateToPageDetail(navController: NavController, pageName: String) {
-    navController.navigate("${PAGE_DETAIL_ROUTE}/$pageName")
+private fun navigateToPageDetail(navController: NavController, pageId: Long) {
+    navController.navigate("$PAGE_DETAILS_ROUTE/$pageId")
 }
 
-object LetheDestinations {
+private infix fun String.with(argument: String) = "$this/{$argument}"
+
+object Destinations {
     const val HOME_ROUTE = "home"
     const val SEARCH_ROUTE = "search"
-    const val PAGE_DETAIL_ROUTE = "pageDetail"
+    const val PAGE_DETAILS_ROUTE = "pageDetails"
     const val PAGE_ID = "pageId"
 }

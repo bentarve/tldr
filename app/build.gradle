@@ -72,6 +72,9 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:3.1.0"
     implementation "androidx.paging:paging-compose:1.0.0-alpha14"
 
+    implementation "com.halilibo.compose-richtext:richtext-ui-material:0.10.0"
+    implementation "com.halilibo.compose-richtext:richtext-commonmark:0.10.0"
+
     implementation "androidx.hilt:hilt-navigation-compose:${rootProject.versions.hiltKtx}"
     implementation "com.google.dagger:hilt-android:${rootProject.versions.daggerHilt}"
     kapt "com.google.dagger:hilt-compiler:${rootProject.versions.daggerHilt}"

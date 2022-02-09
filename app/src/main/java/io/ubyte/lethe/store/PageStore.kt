@@ -34,6 +34,12 @@ class PageStore @Inject constructor(
         }
     }
 
+    fun queryPage(id: Long): DomainPage {
+        return db.findPage(id) { name, platform, markdown ->
+            DomainPage(name, platform, markdown)
+        }.executeAsOne()
+    }
+
     fun queryPagingSource(): PagingSource<Long, Page> {
         return QueryPagingSource(
             countQuery = db.count(),

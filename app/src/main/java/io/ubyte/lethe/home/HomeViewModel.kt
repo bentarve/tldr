@@ -25,6 +25,8 @@ class HomeViewModel @Inject constructor(
                 uiState = Home.LOADING
                 updatePages()
                 uiState = Home.ALL_PAGES
+            } else {
+                uiState = Home.ALL_PAGES
             }
         }
     }
