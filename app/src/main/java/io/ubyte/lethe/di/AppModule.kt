@@ -12,6 +12,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.*
 import io.ubyte.lethe.Database
+import io.ubyte.lethe.HistoryQueries
 import io.ubyte.lethe.PageQueries
 import io.ubyte.lethe.core.util.AppCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
@@ -48,5 +49,11 @@ object AppModule {
     @Provides
     fun providePageQueries(database: Database): PageQueries {
         return database.pageQueries
+    }
+
+    @Singleton
+    @Provides
+    fun provideHistoryQueries(database: Database): HistoryQueries {
+        return database.historyQueries
     }
 }

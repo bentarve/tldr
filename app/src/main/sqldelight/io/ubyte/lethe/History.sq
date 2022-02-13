@@ -5,6 +5,8 @@ CREATE TABLE history(
   FOREIGN KEY (pageId) REFERENCES page(id) ON DELETE CASCADE
 );
 
+CREATE INDEX page_id ON history(pageId);
+
 insert:
 INSERT OR FAIL INTO history(pageId)
 VALUES (?);

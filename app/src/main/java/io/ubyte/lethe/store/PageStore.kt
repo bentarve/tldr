@@ -1,21 +1,30 @@
 package io.ubyte.lethe.store
 
 import androidx.paging.PagingSource
+import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.android.paging3.QueryPagingSource
-import io.ubyte.lethe.Page
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
+import io.ubyte.lethe.HistoryQueries
 import io.ubyte.lethe.PageQueries
 import io.ubyte.lethe.core.util.AppCoroutineDispatchers
+import io.ubyte.lethe.model.Page
+import io.ubyte.lethe.model.Page.Companion.mapToPage
+import io.ubyte.lethe.model.PageIdentifier
+import io.ubyte.lethe.model.PageIdentifier.Companion.mapToPageIdentifier
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import io.ubyte.lethe.model.Page as DomainPage
 
 @Singleton
 class PageStore @Inject constructor(
     private val db: PageQueries,
+    private val history: HistoryQueries,
     private val dispatchers: AppCoroutineDispatchers
 ) {
-    suspend fun updatePages(pages: List<DomainPage>) = withContext(dispatchers.io) {
+    suspend fun updatePages(pages: List<Page>) = withContext(dispatchers.io) {
         db.transaction {
             val ids = db.findAllPageIds().executeAsList().toMutableSet()
 
@@ -34,20 +43,36 @@ class PageStore @Inject constructor(
         }
     }
 
-    fun queryPage(id: Long): DomainPage {
-        return db.findPage(id) { name, platform, markdown ->
-            DomainPage(name, platform, markdown)
-        }.executeAsOne()
+    suspend fun queryPage(id: Long): Page = withContext(dispatchers.io) {
+        db.findPageById(id, ::mapToPage).executeAsOne().also {
+            history.insert(id)
+        }
     }
 
-    fun queryPagingSource(): PagingSource<Long, Page> {
+    suspend fun queryPages(term: String) {
+//        db.queryTerm(term).asFlow().mapToList(dispatchers.io)
+    }
+
+    fun queryMostRecent() = db.mostRecent(::mapToPageIdentifier)
+        .asFlow().mapToList(dispatchers.io)
+
+    fun queryMostFrequent() = db.mostFrequent(::mapToPageIdentifier)
+        .asFlow().mapToList(dispatchers.io)
+
+    fun queryPagingSource(): PagingSource<Long, PageIdentifier> {
         return QueryPagingSource(
             countQuery = db.count(),
             transacter = db,
             dispatcher = dispatchers.io,
-            queryProvider = db::allPages
+            queryProvider = ::allPages
         )
     }
 
-    fun count(): Long = db.count().executeAsOne()
+    private fun allPages(limit: Long, offset: Long): Query<PageIdentifier> {
+        return db.findPages(limit, offset, ::mapToPageIdentifier)
+    }
+
+    suspend fun count(): Long = withContext(dispatchers.io) {
+        db.count().executeAsOne()
+    }
 }
