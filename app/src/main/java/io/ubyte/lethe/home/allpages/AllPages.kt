@@ -13,12 +13,15 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import io.ubyte.lethe.home.topbar.HomeTopBar
-import io.ubyte.lethe.home.topbar.HomeTopBar.TopBarHeight
+import io.ubyte.lethe.core.ui.components.TopBar
+import io.ubyte.lethe.core.ui.components.TopBarHeight
+import io.ubyte.lethe.home.HomeSearchBar
+import kotlin.math.roundToInt
 
 @Composable
 fun AllPages(
@@ -42,27 +45,41 @@ fun AllPages(
             .fillMaxSize()
             .nestedScroll(nestedScrollConnection)
     ) {
-        AllPagesColumn(hiltViewModel(), openPageDetails)
-        HomeTopBar(openSearch, toolbarOffsetHeightPx)
+        ListOfAllPages(hiltViewModel(), openPageDetails)
+        TopBar(
+            modifier = Modifier.offset {
+                IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt())
+            }
+        ) {
+            HomeSearchBar(openSearch)
+        }
     }
 }
 
 @Composable
-private fun AllPagesColumn(
+private fun ListOfAllPages(
     viewModel: AllPagesViewModel,
     openPageDetails: (pageId: Long) -> Unit
 ) {
     val pages = viewModel.pager.collectAsLazyPagingItems()
-    LazyColumn(contentPadding = PaddingValues(top = TopBarHeight)) {
+    LazyColumn(
+        contentPadding = PaddingValues(
+            top = TopBarHeight + 16.dp,
+            start = 16.dp,
+            end = 16.dp
+        ),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         items(pages) { page ->
             page?.let {
-                Text(
-                    text = "${page.name} - ${page.platform}",
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp)
                         .clickable { openPageDetails(page.id) }
-                )
+                ) {
+                    Text(text = page.name)
+                    Text(text = page.platform)
+                }
             }
         }
     }

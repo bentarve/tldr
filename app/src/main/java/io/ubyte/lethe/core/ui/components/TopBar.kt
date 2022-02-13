@@ -11,20 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Toolbar(
-    navigateUp: () -> Unit,
+fun TopBar(
+    modifier: Modifier = Modifier,
+    navigateUp: (() -> Unit)? = null,
     content: @Composable RowScope.() -> Unit
 ) {
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .height(TopBarHeight)
             .fillMaxSize()
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            BackButton(navigateUp)
+            navigateUp?.let { BackButton(navigateUp) }
             content()
         }
     }
 }
 
-private val TopBarHeight = 56.dp
+val TopBarHeight = 56.dp

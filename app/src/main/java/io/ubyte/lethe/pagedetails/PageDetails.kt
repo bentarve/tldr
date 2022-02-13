@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.material.MaterialRichText
-import io.ubyte.lethe.core.ui.components.Toolbar
+import io.ubyte.lethe.core.ui.components.TopBar
 
 @Composable
 fun PageDetails(
@@ -19,7 +19,7 @@ fun PageDetails(
 ) {
     Surface(Modifier.fillMaxSize()) {
         Column {
-            Toolbar(navigateUp) {
+            TopBar(navigateUp = navigateUp) {
                 Text(
                     text = viewModel.pageName,
                     modifier = Modifier.padding(start = 24.dp)

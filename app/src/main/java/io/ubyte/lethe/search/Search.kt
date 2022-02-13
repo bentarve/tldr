@@ -14,8 +14,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import io.ubyte.lethe.core.ui.components.BackButton
-import io.ubyte.lethe.core.ui.components.Toolbar
+import io.ubyte.lethe.core.ui.components.TopBar
 
 @Composable
 fun Search(
@@ -25,7 +24,7 @@ fun Search(
 ) {
     Surface(Modifier.fillMaxSize()) {
         Column {
-            Toolbar(navigateUp) {
+            TopBar(navigateUp = navigateUp) {
                 val focusRequester = remember { FocusRequester() }
                 SearchField(
                     modifier = Modifier
@@ -86,8 +85,8 @@ private fun MostRecent(
     val pages = viewModel.mostRecentPages
     Column(Modifier.padding(horizontal = 16.dp)) {
         Text(
-            text = "Most recent",
-            modifier = Modifier.padding(top = 12.dp, bottom = 8.dp)
+            text = "Recent commands",
+            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
         )
         pages.forEach { page ->
             Row(
