@@ -2,23 +2,25 @@ package io.ubyte.lethe.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import io.ubyte.lethe.core.ui.components.TopBar
 import io.ubyte.lethe.home.allpages.AllPages
+import io.ubyte.lethe.model.PageIdentifier
 
 @Composable
 fun Home(
@@ -26,14 +28,72 @@ fun Home(
     openSearch: () -> Unit,
     openPageDetails: (pageId: Long) -> Unit
 ) {
-    when (viewModel.uiState) {
-        Home.ALL_PAGES -> {
-            AllPages(openSearch, openPageDetails)
+    Surface(Modifier.fillMaxSize()) {
+        when (viewModel.uiState) {
+            Home.ALL_PAGES -> {
+                AllPages(viewModel, openSearch, openPageDetails)
+            }
+            Home.MOST_FREQUENT -> {
+                MostFrequent(viewModel, openSearch, openPageDetails)
+            }
+            Home.LOADING -> {
+                Loading()
+            }
         }
-        Home.MOST_FREQUENT -> {
+    }
+}
+
+@Composable
+private fun MostFrequent(
+    viewModel: HomeViewModel,
+    openSearch: () -> Unit,
+    openPageDetails: (pageId: Long) -> Unit
+) {
+    Column {
+        TopBar {
+            HomeSearchBar(openSearch)
         }
-        Home.LOADING -> {
-            Loading()
+        ListPages(
+            modifier = Modifier.padding(top = 2.dp),
+            pages = viewModel.mostFrequentPages,
+            contentDescription = "Frequent",
+            icon = Icons.Default.Code, // todo extract
+            openPageDetails = openPageDetails
+        )
+    }
+}
+
+@Composable
+fun ListPages(
+    modifier: Modifier = Modifier,
+    pages: List<PageIdentifier>,
+    contentDescription: String,
+    icon: ImageVector,
+    openPageDetails: (pageId: Long) -> Unit
+) {
+    Column(modifier.padding(horizontal = 16.dp)) {
+        Text(
+            text = "$contentDescription commands",
+            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
+        )
+        pages.forEach { page ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { openPageDetails(page.id) }
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.padding(end = 24.dp),
+                    imageVector = icon,
+                    contentDescription = contentDescription
+                )
+                Column {
+                    Text(text = page.name)
+                    Text(text = page.platform)
+                }
+            }
         }
     }
 }

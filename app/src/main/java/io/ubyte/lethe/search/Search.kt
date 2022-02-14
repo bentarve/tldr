@@ -15,6 +15,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.ubyte.lethe.core.ui.components.TopBar
+import io.ubyte.lethe.home.ListPages
 
 @Composable
 fun Search(
@@ -79,6 +80,19 @@ fun SearchField(modifier: Modifier) {
 
 @Composable
 private fun MostRecent(
+    viewModel: SearchViewModel,
+    openPageDetails: (Long) -> Unit
+) {
+    ListPages(
+        pages = viewModel.mostRecentPages,
+        contentDescription = "Recent",
+        icon = Icons.Default.History, // todo extract
+        openPageDetails = openPageDetails
+    )
+}
+
+@Composable
+private fun MostRecent2(
     viewModel: SearchViewModel,
     openPageDetails: (Long) -> Unit
 ) {

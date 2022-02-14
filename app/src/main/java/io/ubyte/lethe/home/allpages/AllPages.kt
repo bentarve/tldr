@@ -15,16 +15,17 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import io.ubyte.lethe.core.ui.components.TopBar
 import io.ubyte.lethe.core.ui.components.TopBarHeight
 import io.ubyte.lethe.home.HomeSearchBar
+import io.ubyte.lethe.home.HomeViewModel
 import kotlin.math.roundToInt
 
 @Composable
 fun AllPages(
+    viewModel: HomeViewModel,
     openSearch: () -> Unit,
     openPageDetails: (Long) -> Unit
 ) {
@@ -45,7 +46,7 @@ fun AllPages(
             .fillMaxSize()
             .nestedScroll(nestedScrollConnection)
     ) {
-        ListOfAllPages(hiltViewModel(), openPageDetails)
+        ListOfAllPages(viewModel, openPageDetails)
         TopBar(
             modifier = Modifier.offset {
                 IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt())
@@ -58,7 +59,7 @@ fun AllPages(
 
 @Composable
 private fun ListOfAllPages(
-    viewModel: AllPagesViewModel,
+    viewModel: HomeViewModel,
     openPageDetails: (pageId: Long) -> Unit
 ) {
     val pages = viewModel.pager.collectAsLazyPagingItems()
