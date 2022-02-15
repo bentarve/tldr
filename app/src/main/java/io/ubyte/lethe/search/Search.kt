@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,44 +28,49 @@ fun Search(
             TopBar(navigateUp = navigateUp) {
                 val focusRequester = remember { FocusRequester() }
                 SearchField(
+                    viewModel = viewModel,
                     modifier = Modifier
                         .padding(start = 24.dp)
-                        .focusRequester(focusRequester)
+                        .focusRequester(focusRequester),
                 )
-                LaunchedEffect(Unit) {
-                    focusRequester.requestFocus()
-                }
+                LaunchedEffect(Unit) { focusRequester.requestFocus() }
             }
             Divider(thickness = 2.dp)
-            MostRecent(viewModel, openPageDetails)
+            if (viewModel.uiState.searchResult.isNotEmpty()) {
+                SearchResult(viewModel, openPageDetails)
+            } else {
+                MostRecent(viewModel, openPageDetails)
+            }
         }
     }
 }
-
 @Composable
-fun SearchField(modifier: Modifier) {
-    var value by remember { mutableStateOf(TextFieldValue("")) }
+private fun SearchField(
+    viewModel: SearchViewModel,
+    modifier: Modifier
+) {
+    var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
-            value = value,
-            onValueChange = { value = it },
+            value = textFieldValue,
+            onValueChange = { textFieldValue = it },
             singleLine = true,
             modifier = modifier.weight(2f),
             decorationBox = { innerTextField ->
                 Box {
-                    if (value.text.isEmpty()) {
+                    if (textFieldValue.text.isEmpty()) {
                         Text("Search commands")
                     }
                     innerTextField()
                 }
             }
         )
-        if (value.text.isNotEmpty()) {
+        if (textFieldValue.text.isNotEmpty()) {
             IconButton(
-                onClick = { value = TextFieldValue("") },
+                onClick = { textFieldValue = TextFieldValue() },
                 Modifier.requiredWidth(IntrinsicSize.Max)
             ) {
                 Icon(
@@ -75,6 +81,22 @@ fun SearchField(modifier: Modifier) {
             }
         }
     }
+    LaunchedEffect(textFieldValue) {
+        viewModel.querySearch(textFieldValue.text)
+    }
+}
+
+@Composable
+private fun SearchResult(
+    viewModel: SearchViewModel,
+    openPageDetails: (Long) -> Unit
+) {
+    RecurringPages(
+        pages = viewModel.uiState.searchResult,
+        contentDescription = "Search",
+        icon = Icons.Default.Search,
+        openPageDetails = openPageDetails
+    )
 }
 
 @Composable
@@ -83,7 +105,7 @@ private fun MostRecent(
     openPageDetails: (Long) -> Unit
 ) {
     RecurringPages(
-        pages = viewModel.mostRecentPages,
+        pages = viewModel.uiState.recentPages,
         contentDescription = "Recent",
         icon = Icons.Default.History, // todo extract
         openPageDetails = openPageDetails

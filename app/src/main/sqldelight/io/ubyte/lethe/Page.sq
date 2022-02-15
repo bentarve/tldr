@@ -35,17 +35,18 @@ SELECT name, platform, markdown
 FROM page
 WHERE id = ?;
 
--- queryTerm:
-    -- SELECT name, platform, markdown
--- FROM page
--- WHERE name LIKE '%' || ? || '%'
--- ORDER BY
---   CASE
---     WHEN name LIKE ? THEN 1
---     WHEN name LIKE ? || '%' THEN 2
---     ELSE 3
---   END ASC
--- LIMIT 10;
+queryTerm:
+SELECT id, name, platform
+FROM page
+--WHERE name LIKE '%' || ?1 || '%'
+WHERE name LIKE ?1
+ORDER BY
+  CASE
+    WHEN name LIKE ?1 THEN 1
+    WHEN name LIKE ?1 || '%' THEN 2
+    ELSE 3
+  END ASC
+LIMIT 10;
 
 findPages:
 SELECT id, name, platform
@@ -54,9 +55,9 @@ LIMIT :limit OFFSET :offset;
 
 mostRecent:
 SELECT DISTINCT
-	page.id,
-	page.name,
-	page.platform
+  page.id,
+  page.name,
+  page.platform
 FROM page
 JOIN history ON (history.pageId == page.id)
 ORDER BY history.id DESC
@@ -64,9 +65,9 @@ LIMIT 7;
 
 mostFrequent:
 SELECT
-	page.id,
-	page.name,
-	page.platform
+  page.id,
+  page.name,
+  page.platform
 FROM page
 JOIN history ON (history.pageId == page.id)
 GROUP BY (history.pageId)

@@ -49,9 +49,8 @@ class PageStore @Inject constructor(
         }
     }
 
-    suspend fun queryPages(term: String) {
-//        db.queryTerm(term).asFlow().mapToList(dispatchers.io)
-    }
+    fun queryPages(term: String) = db.queryTerm(term, ::mapToPageIdentifier)
+        .asFlow().mapToList(dispatchers.io)
 
     fun queryMostRecent() = db.mostRecent(::mapToPageIdentifier)
         .asFlow().mapToList(dispatchers.io)

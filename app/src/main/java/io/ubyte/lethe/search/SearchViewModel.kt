@@ -10,25 +10,32 @@ import io.ubyte.lethe.model.PageIdentifier
 import io.ubyte.lethe.store.PageStore
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import logcat.logcat
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val store: PageStore
 ) : ViewModel() {
-    var mostRecentPages by mutableStateOf(emptyList<PageIdentifier>())
+    var uiState by mutableStateOf(SearchViewState())
         private set
 
     fun querySearch(term: String) {
-        viewModelScope.launch {
-            //store.queryPages(term)
+        if (term.isNotEmpty()) {
+            viewModelScope.launch {
+                store.queryPages(term).collect { pages ->
+                    uiState = uiState.copy(searchResult = pages)
+                }
+            }
+        } else {
+            uiState = uiState.copy(searchResult = emptyList())
         }
     }
 
     init {
         viewModelScope.launch {
             store.queryMostRecent().collect { pages ->
-                mostRecentPages = pages
+                uiState = uiState.copy(recentPages = pages)
             }
         }
     }
