@@ -18,9 +18,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.ubyte.lethe.core.ui.components.TopBar
-import io.ubyte.lethe.home.allpages.AllPages
 import io.ubyte.lethe.model.PageIdentifier
+import io.ubyte.lethe.pages.Pages
 
 @Composable
 fun Home(
@@ -30,14 +31,20 @@ fun Home(
 ) {
     Surface(Modifier.fillMaxSize()) {
         when (viewModel.uiState) {
-            Home.ALL_PAGES -> {
-                AllPages(viewModel, openSearch, openPageDetails)
+            is HomeViewState.Loading -> Loading()
+            is HomeViewState.Empty -> {
+                Pages(
+                    viewModel = hiltViewModel(),
+                    openSearch = openSearch,
+                    openPageDetails = openPageDetails
+                )
             }
-            Home.MOST_FREQUENT -> {
-                MostFrequent(viewModel, openSearch, openPageDetails)
-            }
-            Home.LOADING -> {
-                Loading()
+            is HomeViewState.Data -> {
+                MostFrequent(
+                    (viewModel.uiState as HomeViewState.Data).pages,
+                    openSearch,
+                    openPageDetails
+                )
             }
         }
     }
@@ -45,17 +52,15 @@ fun Home(
 
 @Composable
 private fun MostFrequent(
-    viewModel: HomeViewModel,
+    pages: List<PageIdentifier>,
     openSearch: () -> Unit,
     openPageDetails: (pageId: Long) -> Unit
 ) {
     Column {
-        TopBar {
-            HomeSearchBar(openSearch)
-        }
-        ListPages(
+        TopBar { SearchButton(openSearch) }
+        RecurringPages(
             modifier = Modifier.padding(top = 2.dp),
-            pages = viewModel.mostFrequentPages,
+            pages = pages,
             contentDescription = "Frequent",
             icon = Icons.Default.Code, // todo extract
             openPageDetails = openPageDetails
@@ -64,7 +69,7 @@ private fun MostFrequent(
 }
 
 @Composable
-fun ListPages(
+fun RecurringPages(
     modifier: Modifier = Modifier,
     pages: List<PageIdentifier>,
     contentDescription: String,
@@ -99,7 +104,7 @@ fun ListPages(
 }
 
 @Composable
-fun HomeSearchBar(openSearch: () -> Unit) {
+fun SearchButton(openSearch: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
@@ -129,11 +134,4 @@ private fun Loading() {
     ) {
         CircularProgressIndicator()
     }
-}
-
-enum class Home {
-    ALL_PAGES,
-    MOST_FREQUENT,
-    LOADING,
-    INITIAL
 }

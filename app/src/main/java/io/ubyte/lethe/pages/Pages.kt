@@ -1,4 +1,4 @@
-package io.ubyte.lethe.home.allpages
+package io.ubyte.lethe.pages
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,13 +19,12 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import io.ubyte.lethe.core.ui.components.TopBar
 import io.ubyte.lethe.core.ui.components.TopBarHeight
-import io.ubyte.lethe.home.HomeSearchBar
-import io.ubyte.lethe.home.HomeViewModel
+import io.ubyte.lethe.home.SearchButton
 import kotlin.math.roundToInt
 
 @Composable
-fun AllPages(
-    viewModel: HomeViewModel,
+fun Pages(
+    viewModel: PagesViewModel,
     openSearch: () -> Unit,
     openPageDetails: (Long) -> Unit
 ) {
@@ -46,20 +45,20 @@ fun AllPages(
             .fillMaxSize()
             .nestedScroll(nestedScrollConnection)
     ) {
-        ListOfAllPages(viewModel, openPageDetails)
+        Pages(viewModel, openPageDetails)
         TopBar(
             modifier = Modifier.offset {
                 IntOffset(x = 0, y = toolbarOffsetHeightPx.value.roundToInt())
             }
         ) {
-            HomeSearchBar(openSearch)
+            SearchButton(openSearch)
         }
     }
 }
 
 @Composable
-private fun ListOfAllPages(
-    viewModel: HomeViewModel,
+private fun Pages(
+    viewModel: PagesViewModel,
     openPageDetails: (pageId: Long) -> Unit
 ) {
     val pages = viewModel.pager.collectAsLazyPagingItems()

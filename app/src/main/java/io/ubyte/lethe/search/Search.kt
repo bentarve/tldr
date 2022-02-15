@@ -1,6 +1,5 @@
 package io.ubyte.lethe.search
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -15,7 +14,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import io.ubyte.lethe.core.ui.components.TopBar
-import io.ubyte.lethe.home.ListPages
+import io.ubyte.lethe.home.RecurringPages
 
 @Composable
 fun Search(
@@ -83,43 +82,10 @@ private fun MostRecent(
     viewModel: SearchViewModel,
     openPageDetails: (Long) -> Unit
 ) {
-    ListPages(
+    RecurringPages(
         pages = viewModel.mostRecentPages,
         contentDescription = "Recent",
         icon = Icons.Default.History, // todo extract
         openPageDetails = openPageDetails
     )
-}
-
-@Composable
-private fun MostRecent2(
-    viewModel: SearchViewModel,
-    openPageDetails: (Long) -> Unit
-) {
-    val pages = viewModel.mostRecentPages
-    Column(Modifier.padding(horizontal = 16.dp)) {
-        Text(
-            text = "Recent commands",
-            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
-        )
-        pages.forEach { page ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { openPageDetails(page.id) }
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.padding(end = 24.dp),
-                    imageVector = Icons.Default.History, // todo extract
-                    contentDescription = "Recent"
-                )
-                Column {
-                    Text(text = page.name)
-                    Text(text = page.platform)
-                }
-            }
-        }
-    }
 }

@@ -5,12 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ubyte.lethe.model.PageIdentifier
-import io.ubyte.lethe.usecases.UpdatePages
+import io.ubyte.lethe.home.HomeViewState.*
 import io.ubyte.lethe.store.PageStore
+import io.ubyte.lethe.usecases.UpdatePages
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,29 +18,21 @@ class HomeViewModel @Inject constructor(
     private val store: PageStore,
     private val updatePages: UpdatePages
 ) : ViewModel() {
-    var uiState by mutableStateOf(Home.INITIAL)
-        private set
-
-    val pager = Pager(PagingConfig(pageSize = 100)) {
-        store.queryPagingSource()
-    }.flow
-
-    var mostFrequentPages by mutableStateOf(emptyList<PageIdentifier>())
+    var uiState by mutableStateOf<HomeViewState>(Data(emptyList()))
         private set
 
     private fun loadPages() {
         viewModelScope.launch {
             if (store.count() == 0L) {
-                uiState = Home.LOADING
+                uiState = Loading
                 updatePages()
-                uiState = Home.ALL_PAGES
+                uiState = Empty
             } else {
                 store.queryMostFrequent().collect { pages ->
-                    if (pages.size > 3) {
-                        mostFrequentPages = pages
-                        uiState = Home.MOST_FREQUENT
+                    uiState = if (pages.size > 3) {
+                        Data(pages)
                     } else {
-                        uiState = Home.ALL_PAGES
+                        Empty
                     }
                 }
             }
