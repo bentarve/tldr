@@ -38,8 +38,7 @@ WHERE id = ?;
 queryTerm:
 SELECT id, name, platform
 FROM page
---WHERE name LIKE '%' || ?1 || '%'
-WHERE name LIKE ?1
+WHERE name LIKE '%' || ?1 || '%'
 ORDER BY
   CASE
     WHEN name LIKE ?1 THEN 1

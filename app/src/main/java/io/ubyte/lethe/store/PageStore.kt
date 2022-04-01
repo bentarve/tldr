@@ -1,11 +1,10 @@
 package io.ubyte.lethe.store
 
 import androidx.paging.PagingSource
-import com.squareup.sqldelight.Query
+import app.cash.sqldelight.Query
 import com.squareup.sqldelight.android.paging3.QueryPagingSource
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import io.ubyte.lethe.HistoryQueries
 import io.ubyte.lethe.PageQueries
 import io.ubyte.lethe.core.util.AppCoroutineDispatchers
@@ -13,7 +12,6 @@ import io.ubyte.lethe.model.Page
 import io.ubyte.lethe.model.Page.Companion.mapToPage
 import io.ubyte.lethe.model.PageIdentifier
 import io.ubyte.lethe.model.PageIdentifier.Companion.mapToPageIdentifier
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton

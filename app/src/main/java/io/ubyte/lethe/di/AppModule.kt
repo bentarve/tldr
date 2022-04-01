@@ -1,8 +1,8 @@
 package io.ubyte.lethe.di
 
 import android.content.Context
-import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.squareup.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,7 +41,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideDataBase(@ApplicationContext context: Context): Database {
-        val driver: SqlDriver = AndroidSqliteDriver(Database.Schema, context, "man-pages.db")
+        val driver: SqlDriver = AndroidSqliteDriver(Database.Schema, context, "tldr.db")
         return Database(driver)
     }
 
