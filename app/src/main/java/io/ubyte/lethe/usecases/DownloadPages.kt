@@ -2,7 +2,7 @@ package io.ubyte.lethe.usecases
 
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.utils.io.*
+import io.ktor.client.statement.*
 import io.ktor.utils.io.jvm.javaio.*
 import io.ubyte.lethe.core.util.AppCoroutineDispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +26,8 @@ class DownloadPages @Inject constructor(
 
         fileSystem.write(temporaryFile) {
             httpClient.use { client ->
-                client.get<ByteReadChannel>(ZIP_ASSET_URL)
+                client.get(ZIP_ASSET_URL)
+                    .bodyAsChannel()
                     .copyTo(outputStream())
             }
         }
