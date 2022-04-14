@@ -4,7 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.utils.io.jvm.javaio.*
-import io.ubyte.lethe.core.util.AppCoroutineDispatchers
+import io.ubyte.lethe.util.AppCoroutineDispatchers
 import kotlinx.coroutines.withContext
 import okio.FileSystem
 import okio.Path

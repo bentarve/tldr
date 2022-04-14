@@ -4,7 +4,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import io.ubyte.lethe.HistoryQueries
 import io.ubyte.lethe.PageQueries
-import io.ubyte.lethe.core.util.AppCoroutineDispatchers
+import io.ubyte.lethe.util.AppCoroutineDispatchers
 import io.ubyte.lethe.model.Page
 import io.ubyte.lethe.model.Page.Companion.mapToPage
 import io.ubyte.lethe.model.PageIdentifier.Companion.mapToPageIdentifier

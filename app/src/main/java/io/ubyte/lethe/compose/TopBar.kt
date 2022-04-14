@@ -1,4 +1,4 @@
-package io.ubyte.lethe.core.ui.components
+package io.ubyte.lethe.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon

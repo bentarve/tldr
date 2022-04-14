@@ -14,7 +14,7 @@ import io.ktor.client.plugins.*
 import io.ubyte.lethe.Database
 import io.ubyte.lethe.HistoryQueries
 import io.ubyte.lethe.PageQueries
-import io.ubyte.lethe.core.util.AppCoroutineDispatchers
+import io.ubyte.lethe.util.AppCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
 import javax.inject.Singleton

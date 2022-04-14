@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import io.ubyte.lethe.core.ui.components.TopBar
+import io.ubyte.lethe.compose.TopBar
 import io.ubyte.lethe.model.PageIdentifier
 
 @Composable

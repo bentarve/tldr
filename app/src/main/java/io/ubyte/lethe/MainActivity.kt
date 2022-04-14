@@ -18,10 +18,9 @@ import io.ubyte.lethe.Destinations.HOME_ROUTE
 import io.ubyte.lethe.Destinations.PAGES_ROUTE
 import io.ubyte.lethe.Destinations.PAGE_ID
 import io.ubyte.lethe.Destinations.SEARCH_ROUTE
-import io.ubyte.lethe.core.ui.theme.LetheTheme
+import io.ubyte.lethe.theme.LetheTheme
 import io.ubyte.lethe.home.Home
 import io.ubyte.lethe.pagedetails.PageDetails
-import io.ubyte.lethe.pages.Pages
 import io.ubyte.lethe.search.Search
 
 @AndroidEntryPoint
@@ -57,13 +56,6 @@ private fun LetheNavHost(navController: NavHostController) {
                 viewModel = hiltViewModel(),
                 openPageDetails = { pageId -> navigateToPageDetails(navController, pageId) },
                 navigateUp = navController::navigateUp
-            )
-        }
-        composable(PAGES_ROUTE) {
-            Pages(
-                viewModel = hiltViewModel(),
-                openSearch = { navController.navigate(SEARCH_ROUTE) },
-                openPageDetails = { pageId -> navigateToPageDetails(navController, pageId) }
             )
         }
         composable(
