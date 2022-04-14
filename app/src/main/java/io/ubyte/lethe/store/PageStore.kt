@@ -1,8 +1,5 @@
 package io.ubyte.lethe.store
 
-import androidx.paging.PagingSource
-import app.cash.sqldelight.Query
-import com.squareup.sqldelight.android.paging3.QueryPagingSource
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import io.ubyte.lethe.HistoryQueries
@@ -10,7 +7,6 @@ import io.ubyte.lethe.PageQueries
 import io.ubyte.lethe.core.util.AppCoroutineDispatchers
 import io.ubyte.lethe.model.Page
 import io.ubyte.lethe.model.Page.Companion.mapToPage
-import io.ubyte.lethe.model.PageIdentifier
 import io.ubyte.lethe.model.PageIdentifier.Companion.mapToPageIdentifier
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -55,19 +51,6 @@ class PageStore @Inject constructor(
 
     fun queryMostFrequent() = db.mostFrequent(::mapToPageIdentifier)
         .asFlow().mapToList(dispatchers.io)
-
-    fun queryPagingSource(): PagingSource<Long, PageIdentifier> {
-        return QueryPagingSource(
-            countQuery = db.count(),
-            transacter = db,
-            dispatcher = dispatchers.io,
-            queryProvider = ::allPages
-        )
-    }
-
-    private fun allPages(limit: Long, offset: Long): Query<PageIdentifier> {
-        return db.findPages(limit, offset, ::mapToPageIdentifier)
-    }
 
     suspend fun count(): Long = withContext(dispatchers.io) {
         db.count().executeAsOne()

@@ -18,10 +18,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import io.ubyte.lethe.core.ui.components.TopBar
 import io.ubyte.lethe.model.PageIdentifier
-import io.ubyte.lethe.pages.Pages
 
 @Composable
 fun Home(
@@ -33,11 +31,7 @@ fun Home(
         when (viewModel.uiState) {
             is HomeViewState.Loading -> Loading()
             is HomeViewState.Empty -> {
-                Pages(
-                    viewModel = hiltViewModel(),
-                    openSearch = openSearch,
-                    openPageDetails = openPageDetails
-                )
+                // todo
             }
             is HomeViewState.Data -> {
                 MostFrequent(

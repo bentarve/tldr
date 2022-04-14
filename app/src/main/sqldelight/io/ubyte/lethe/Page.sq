@@ -47,11 +47,6 @@ ORDER BY
   END ASC
 LIMIT 10;
 
-findPages:
-SELECT id, name, platform
-FROM page
-LIMIT :limit OFFSET :offset;
-
 mostRecent:
 SELECT DISTINCT
   page.id,
