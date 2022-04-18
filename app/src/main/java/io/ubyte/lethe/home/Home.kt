@@ -1,25 +1,21 @@
 package io.ubyte.lethe.home
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import io.ubyte.lethe.compose.TopBar
-import io.ubyte.lethe.model.PageIdentifier
+import io.ubyte.lethe.compose.Pages
+import io.ubyte.lethe.compose.SectionHeader
+import io.ubyte.lethe.compose.Toolbar
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun Home(
@@ -27,105 +23,73 @@ fun Home(
     openSearch: () -> Unit,
     openPageDetails: (pageId: Long) -> Unit
 ) {
-    Surface(Modifier.fillMaxSize()) {
-        when (viewModel.uiState) {
-            is HomeViewState.Loading -> Loading()
-            is HomeViewState.Empty -> {
-                // todo
-            }
-            is HomeViewState.Data -> {
-                MostFrequent(
-                    (viewModel.uiState as HomeViewState.Data).pages,
-                    openSearch,
-                    openPageDetails
+    Column(Modifier.padding(horizontal = 8.dp)) {
+        val uiState = viewModel.uiState
+        Crossfade(uiState) { state ->
+            SetupToolbar(state, openSearch)
+        }
+        if (uiState is HomeViewState.Data) {
+            Spacer(Modifier.height(24.dp))
+            Column(Modifier.padding(horizontal = 8.dp)) {
+                SectionHeader(text = "Frequent pages")
+                Pages(
+                    pages = uiState.pages,
+                    openPageDetails = openPageDetails
                 )
             }
+        } else {
+            Tldr()
         }
     }
 }
 
 @Composable
-private fun MostFrequent(
-    pages: List<PageIdentifier>,
-    openSearch: () -> Unit,
-    openPageDetails: (pageId: Long) -> Unit
-) {
-    Column {
-        TopBar { SearchButton(openSearch) }
-        RecurringPages(
-            modifier = Modifier.padding(top = 2.dp),
-            pages = pages,
-            contentDescription = "Frequent",
-            icon = Icons.Default.Code, // todo extract
-            openPageDetails = openPageDetails
-        )
-    }
-}
-
-@Composable
-fun RecurringPages(
-    modifier: Modifier = Modifier,
-    pages: List<PageIdentifier>,
-    contentDescription: String,
-    icon: ImageVector,
-    openPageDetails: (pageId: Long) -> Unit
-) {
-    Column(modifier.padding(horizontal = 16.dp)) {
-        Text(
-            text = "$contentDescription commands",
-            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
-        )
-        pages.forEach { page ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { openPageDetails(page.id) }
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.padding(end = 24.dp),
-                    imageVector = icon,
-                    contentDescription = contentDescription
-                )
-                Column {
-                    Text(text = page.name)
-                    Text(text = page.platform)
-                }
-            }
+private fun SetupToolbar(state: HomeViewState, openSearch: () -> Unit) {
+    if (state == HomeViewState.Loading) {
+        Spacer(Modifier.height(Toolbar.height))
+    } else {
+        Toolbar(Modifier.clickable { openSearch() }) {
+            Text("Search or type page") // todo resources
         }
     }
 }
 
 @Composable
-fun SearchButton(openSearch: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .fillMaxSize()
-            .clip(CircleShape)
-            .background(Color.DarkGray)
-            .clickable { openSearch() }
-    ) {
-        Row(
-            modifier = Modifier.align(Alignment.CenterStart)
-        ) {
-            Icon(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                imageVector = Icons.Default.Search,
-                contentDescription = "Search"
-            )
-            Text(text = "Search commands")
-        }
-    }
-}
-
-@Composable
-private fun Loading() {
+private fun Tldr() {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = BiasAlignment(0f, -0.4f)
     ) {
-        CircularProgressIndicator()
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Row {
+                val style = MaterialTheme.typography.h1
+                Text(
+                    text = "tldr",
+                    style = style
+                )
+                BlinkingCursor(style)
+            }
+            Spacer(Modifier.padding(16.dp))
+            Text(
+                text = "Simplified man pages",
+                style = MaterialTheme.typography.h2
+            )
+        }
+    }
+}
+
+@Composable
+private fun BlinkingCursor(
+    textStyle: TextStyle
+) {
+    var cursor by remember { mutableStateOf(" ") }
+    Text(text = cursor, style = textStyle)
+    LaunchedEffect(Unit) {
+        launch {
+            while (true) {
+                delay(700)
+                cursor = if (cursor == " ") "_" else " "
+            }
+        }
     }
 }

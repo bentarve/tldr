@@ -1,9 +1,9 @@
 package io.ubyte.lethe.search
 
-import io.ubyte.lethe.model.PageIdentifier
+import io.ubyte.lethe.model.PageItem
 
-
-data class SearchViewState(
-    val searchResult: List<PageIdentifier> = emptyList(),
-    val recentPages: List<PageIdentifier> = emptyList()
-)
+sealed class SearchViewState {
+    data class SearchResult(val pages: List<PageItem>) : SearchViewState()
+    data class RecentPages(val pages: List<PageItem>) : SearchViewState()
+    object NoResult : SearchViewState()
+}

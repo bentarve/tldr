@@ -3,8 +3,10 @@ package io.ubyte.lethe
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -18,10 +20,10 @@ import io.ubyte.lethe.Destinations.HOME_ROUTE
 import io.ubyte.lethe.Destinations.PAGES_ROUTE
 import io.ubyte.lethe.Destinations.PAGE_ID
 import io.ubyte.lethe.Destinations.SEARCH_ROUTE
-import io.ubyte.lethe.theme.LetheTheme
 import io.ubyte.lethe.home.Home
 import io.ubyte.lethe.pagedetails.PageDetails
 import io.ubyte.lethe.search.Search
+import io.ubyte.lethe.theme.LetheTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LetheTheme {
                 val navController: NavHostController = rememberNavController()
-                Surface {
+                Surface(Modifier.fillMaxSize()) {
                     LetheNavHost(navController)
                 }
             }
@@ -54,8 +56,7 @@ private fun LetheNavHost(navController: NavHostController) {
         composable(SEARCH_ROUTE) {
             Search(
                 viewModel = hiltViewModel(),
-                openPageDetails = { pageId -> navigateToPageDetails(navController, pageId) },
-                navigateUp = navController::navigateUp
+                openPageDetails = { pageId -> navigateToPageDetails(navController, pageId) }
             )
         }
         composable(

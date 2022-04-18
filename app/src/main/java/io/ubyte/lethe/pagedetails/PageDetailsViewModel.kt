@@ -28,7 +28,7 @@ class PageDetailsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            page = store.queryPage(checkNotNull(savedState.get(PAGE_ID)))
+            page = store.queryPage(checkNotNull(savedState[PAGE_ID]))
         }
     }
 }

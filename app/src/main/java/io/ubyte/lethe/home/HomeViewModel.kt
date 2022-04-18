@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ubyte.lethe.home.HomeViewState.*
+import io.ubyte.lethe.model.Icon
+import io.ubyte.lethe.model.PageItem
 import io.ubyte.lethe.store.PageStore
 import io.ubyte.lethe.usecases.UpdatePages
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,21 +19,23 @@ class HomeViewModel @Inject constructor(
     private val store: PageStore,
     private val updatePages: UpdatePages
 ) : ViewModel() {
-    var uiState by mutableStateOf<HomeViewState>(Data(emptyList()))
+    var uiState by mutableStateOf<HomeViewState>(Loading)
         private set
 
     private fun loadPages() {
         viewModelScope.launch {
             if (store.count() == 0L) {
-                uiState = Loading
                 updatePages()
-                uiState = Empty
+                uiState = Initial
             } else {
-                store.queryMostFrequent().collect { pages ->
-                    uiState = if (pages.size > 3) {
+                store.queryMostFrequent().collect { frequentPages ->
+                    uiState = if (frequentPages.size > 3) {
+                        val pages = frequentPages.map { page ->
+                            PageItem(page, Icon.FREQUENT_PAGES)
+                        }
                         Data(pages)
                     } else {
-                        Empty
+                        Initial
                     }
                 }
             }

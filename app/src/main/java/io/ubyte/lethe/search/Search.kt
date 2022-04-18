@@ -2,67 +2,76 @@ package io.ubyte.lethe.search
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import io.ubyte.lethe.compose.TopBar
-import io.ubyte.lethe.home.RecurringPages
+import io.ubyte.lethe.compose.Pages
+import io.ubyte.lethe.compose.Toolbar
 
 @Composable
 fun Search(
     viewModel: SearchViewModel,
-    openPageDetails: (Long) -> Unit,
-    navigateUp: () -> Unit
+    openPageDetails: (Long) -> Unit
 ) {
-    Surface(Modifier.fillMaxSize()) {
-        Column {
-            TopBar(navigateUp = navigateUp) {
-                val focusRequester = remember { FocusRequester() }
-                SearchField(
-                    viewModel = viewModel,
-                    modifier = Modifier
-                        .padding(start = 24.dp)
-                        .focusRequester(focusRequester),
+    Column(Modifier.padding(horizontal = 8.dp)) {
+        Toolbar {
+            SearchField(viewModel)
+        }
+        when(val result = viewModel.uiState) {
+            is SearchViewState.NoResult -> { Text(text = "No result")}
+            is SearchViewState.RecentPages -> {
+                Pages(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    pages = result.pages,
+                    openPageDetails = openPageDetails
                 )
-                LaunchedEffect(Unit) { focusRequester.requestFocus() }
             }
-            Divider(thickness = 2.dp)
-            if (viewModel.uiState.searchResult.isNotEmpty()) {
-                SearchResult(viewModel, openPageDetails)
-            } else {
-                MostRecent(viewModel, openPageDetails)
+            is SearchViewState.SearchResult -> {
+                Pages(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    pages = result.pages,
+                    openPageDetails = openPageDetails
+                )
             }
         }
     }
 }
+
 @Composable
-private fun SearchField(
-    viewModel: SearchViewModel,
-    modifier: Modifier
+fun SearchField(
+    viewModel: SearchViewModel
 ) {
+    val focusRequester = remember { FocusRequester() }
     var textFieldValue by remember { mutableStateOf(TextFieldValue()) }
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         BasicTextField(
             value = textFieldValue,
             onValueChange = { textFieldValue = it },
             singleLine = true,
-            modifier = modifier.weight(2f),
+            cursorBrush = SolidColor(Color.Red),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .focusRequester(focusRequester),
             decorationBox = { innerTextField ->
                 Box {
                     if (textFieldValue.text.isEmpty()) {
-                        Text("Search commands")
+                        Text(
+                            text = "Search or type page", // todo resources
+                        )
                     }
                     innerTextField()
                 }
@@ -70,44 +79,17 @@ private fun SearchField(
         )
         if (textFieldValue.text.isNotEmpty()) {
             IconButton(
-                onClick = { textFieldValue = TextFieldValue() },
-                Modifier.requiredWidth(IntrinsicSize.Max)
+                onClick = { textFieldValue = TextFieldValue() }
             ) {
                 Icon(
-                    modifier = Modifier.weight(1f),
-                    imageVector = Icons.Default.Clear,
+                    imageVector = Icons.Rounded.Clear, // todo extract
                     contentDescription = "Clear"
                 )
             }
         }
     }
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
     LaunchedEffect(textFieldValue) {
         viewModel.querySearch(textFieldValue.text)
     }
-}
-
-@Composable
-private fun SearchResult(
-    viewModel: SearchViewModel,
-    openPageDetails: (Long) -> Unit
-) {
-    RecurringPages(
-        pages = viewModel.uiState.searchResult,
-        contentDescription = "Search",
-        icon = Icons.Default.Search,
-        openPageDetails = openPageDetails
-    )
-}
-
-@Composable
-private fun MostRecent(
-    viewModel: SearchViewModel,
-    openPageDetails: (Long) -> Unit
-) {
-    RecurringPages(
-        pages = viewModel.uiState.recentPages,
-        contentDescription = "Recent",
-        icon = Icons.Default.History, // todo extract
-        openPageDetails = openPageDetails
-    )
 }
