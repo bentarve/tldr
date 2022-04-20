@@ -10,7 +10,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "io.ubyte.lethe"
+        applicationId "io.ubyte.tldr"
         minSdk 26
         targetSdk 31
         versionCode 1

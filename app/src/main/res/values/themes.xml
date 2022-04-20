@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.Lethe" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.Tldr" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:statusBarColor">@color/backgroundColor</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">@color/backgroundColor</item>
