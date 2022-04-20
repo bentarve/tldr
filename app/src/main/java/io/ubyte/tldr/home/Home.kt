@@ -9,8 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import io.ubyte.tldr.R
 import io.ubyte.tldr.compose.Pages
 import io.ubyte.tldr.compose.SectionHeader
 import io.ubyte.tldr.compose.Toolbar
@@ -31,7 +33,7 @@ fun Home(
         if (uiState is HomeViewState.Data) {
             Spacer(Modifier.height(24.dp))
             Column(Modifier.padding(horizontal = 8.dp)) {
-                SectionHeader(text = "Frequent pages")
+                SectionHeader(text = stringResource(R.string.frequent_pages))
                 Pages(
                     pages = uiState.pages,
                     openPageDetails = openPageDetails
@@ -49,7 +51,7 @@ private fun SetupToolbar(state: HomeViewState, openSearch: () -> Unit) {
         Spacer(Modifier.height(Toolbar.height))
     } else {
         Toolbar(Modifier.clickable { openSearch() }) {
-            Text("Search or type page") // todo resources
+            Text(stringResource(R.string.search_field))
         }
     }
 }
@@ -64,14 +66,14 @@ private fun Tldr() {
             Row {
                 val style = MaterialTheme.typography.h1
                 Text(
-                    text = "tldr",
+                    text = stringResource(R.string.app_name),
                     style = style
                 )
                 BlinkingCursor(style)
             }
             Spacer(Modifier.padding(16.dp))
             Text(
-                text = "Simplified man pages",
+                text = stringResource(R.string.app_description),
                 style = MaterialTheme.typography.h2
             )
         }

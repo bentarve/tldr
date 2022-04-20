@@ -6,9 +6,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.halilibo.richtext.markdown.Markdown
 import com.halilibo.richtext.ui.material.MaterialRichText
+import io.ubyte.tldr.R
 
 @Composable
 fun PageDetails(
@@ -24,7 +26,7 @@ fun PageDetails(
                     IconButton(onClick = { navigateUp() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack, // todo extract
-                            contentDescription = "Navigate back"
+                            contentDescription = stringResource(R.string.navigate_back)
                         )
                     }
                 }

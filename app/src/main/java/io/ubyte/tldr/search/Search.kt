@@ -14,8 +14,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import io.ubyte.tldr.R
 import io.ubyte.tldr.compose.Pages
 import io.ubyte.tldr.compose.Toolbar
 
@@ -30,7 +32,7 @@ fun Search(
         }
         when (val result = viewModel.uiState) {
             is SearchViewState.NoResult -> {
-                Text(text = "No result")
+                Text(text = stringResource(R.string.no_result))
             }
             is SearchViewState.RecentPages -> {
                 Pages(
@@ -70,7 +72,7 @@ fun SearchField(
                 Box {
                     if (textFieldValue.text.isEmpty()) {
                         Text(
-                            text = "Search or type page", // todo resources
+                            text = stringResource(R.string.search_field), // todo resources
                         )
                     }
                     innerTextField()
@@ -83,7 +85,7 @@ fun SearchField(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Clear, // todo extract
-                    contentDescription = "Clear"
+                    contentDescription = stringResource(R.string.clear)
                 )
             }
         }

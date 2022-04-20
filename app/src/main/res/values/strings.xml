@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">tldr</string>
+    <string name="app_description">Simplified man pages</string>
+    <string name="navigate_back">Navigate back</string>
+    <string name="search">Search</string>
+    <string name="search_field">Search or type page</string>
+    <string name="clear">Clear</string>
+    <string name="no_result">No result</string>
+    <string name="frequent_pages">Frequent pages</string>
 </resources>

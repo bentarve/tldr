@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.ubyte.tldr.R
 
 @Composable
 fun Toolbar(
@@ -34,7 +36,7 @@ fun Toolbar(
                     .padding(horizontal = 8.dp)
                     .requiredSize(28.dp),
                 imageVector = Icons.Rounded.Search,
-                contentDescription = "Search"
+                contentDescription = stringResource(R.string.search)
             )
             content()
         }
