@@ -3,6 +3,7 @@ package io.ubyte.tldr.home
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -31,13 +32,20 @@ fun Home(
             SetupToolbar(state, openSearch)
         }
         if (uiState is HomeViewState.Data) {
-            Spacer(Modifier.height(24.dp))
-            Column(Modifier.padding(horizontal = 8.dp)) {
-                SectionHeader(text = stringResource(R.string.frequent_pages))
-                Pages(
-                    pages = uiState.pages,
-                    openPageDetails = openPageDetails
-                )
+            Spacer(Modifier.height(32.dp))
+            Column {
+                SectionHeader(stringResource(R.string.frequent_pages))
+                Spacer(Modifier.height(16.dp))
+                Card(Modifier.fillMaxWidth()) {
+                    Pages(
+                        modifier = Modifier.padding(
+                            horizontal = 8.dp,
+                            vertical = 4.dp
+                        ),
+                        pages = uiState.pages,
+                        openPageDetails = openPageDetails
+                    )
+                }
             }
         } else {
             Tldr()

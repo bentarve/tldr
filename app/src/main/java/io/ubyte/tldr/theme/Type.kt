@@ -13,6 +13,11 @@ private val SourceCodePro = FontFamily(
     Font(R.font.sourcecodepro_semibold, FontWeight.SemiBold)
 )
 
+private val SourceCodeProItalic = FontFamily(
+    Font(R.font.sourcecodepro_italic),
+    Font(R.font.sourcecodepro_italic, FontWeight.SemiBold)
+)
+
 val Typography = Typography(
     h1 = TextStyle(
         fontFamily = SourceCodePro,
@@ -23,5 +28,15 @@ val Typography = Typography(
         fontFamily = SourceCodePro,
         fontWeight = FontWeight.SemiBold,
         fontSize = 18.sp
+    ),
+    h3 = TextStyle(
+        fontFamily = SourceCodePro,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp
+    ),
+    h4 = TextStyle(
+        fontFamily = SourceCodeProItalic,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 14.sp,
     )
 )
