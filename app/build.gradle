@@ -68,16 +68,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${rootProject.versions.appCompat}"
     implementation "com.google.android.material:material:${rootProject.versions.material}"
 
-    // Paging
-    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
-    implementation "androidx.paging:paging-compose:1.0.0-alpha14"
-
     implementation "androidx.compose.compiler:compiler:${rootProject.versions.compose}"
     implementation "androidx.compose.ui:ui:${rootProject.versions.compose}"
     implementation "androidx.compose.material:material:${rootProject.versions.compose}"
     implementation "androidx.compose.ui:ui-tooling-preview:${rootProject.versions.compose}"
-    // TODO Extract needed icons and remove dependency
-    implementation "androidx.compose.material:material-icons-extended:${rootProject.versions.compose}"
 
     implementation "androidx.activity:activity-compose:${rootProject.versions.activityCompose}"
 

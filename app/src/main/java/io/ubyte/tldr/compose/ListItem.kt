@@ -3,12 +3,10 @@ package io.ubyte.tldr.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.NorthWest
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.ubyte.tldr.model.Icon
 import io.ubyte.tldr.model.PageItem
+import io.ubyte.tldr.theme.NorthWest
 
 @Composable
 fun ListItem(
@@ -55,7 +54,7 @@ fun ListItem(
             if (icon != Icon.FREQUENT_PAGE) {
                 Icon(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    imageVector = Icons.Rounded.NorthWest, // todo extract icon
+                    imageVector = Icons.Rounded.NorthWest,
                     contentDescription = null
                 )
             }
