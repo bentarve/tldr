@@ -52,7 +52,7 @@ fun ListItem(
                     }
                 }
             }
-            if (icon != Icon.FREQUENT_PAGES) {
+            if (icon != Icon.FREQUENT_PAGE) {
                 Icon(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     imageVector = Icons.Rounded.NorthWest, // todo extract icon

@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
                 store.queryMostFrequent().collect { frequentPages ->
                     uiState = if (frequentPages.size > 3) {
                         val pages = frequentPages.map { page ->
-                            PageItem(page, Icon.FREQUENT_PAGES)
+                            PageItem(page, Icon.FREQUENT_PAGE)
                         }
                         Data(pages)
                     } else {

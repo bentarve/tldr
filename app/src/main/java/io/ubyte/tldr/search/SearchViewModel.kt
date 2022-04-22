@@ -52,7 +52,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             store.queryMostRecent().collect { pages ->
                 recentPages = pages.map { page ->
-                    PageItem(page, Icon.RECENT_PAGES)
+                    PageItem(page, Icon.RECENT_PAGE)
                 }.also {
                     uiState = RecentPages(it)
                 }
