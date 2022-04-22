@@ -3,5 +3,6 @@
         <item name="android:statusBarColor">@color/backgroundColor</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowBackground">@color/backgroundColor</item>
+        <item name="android:navigationBarColor">@color/backgroundColor</item>
     </style>
 </resources>

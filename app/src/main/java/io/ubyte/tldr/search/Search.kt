@@ -2,9 +2,7 @@ package io.ubyte.tldr.search
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.runtime.*
@@ -17,6 +15,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.ubyte.tldr.R
 import io.ubyte.tldr.compose.Pages
 import io.ubyte.tldr.compose.Toolbar
@@ -62,6 +61,9 @@ fun SearchField(
         BasicTextField(
             value = textFieldValue,
             onValueChange = { textFieldValue = it },
+            textStyle = LocalTextStyle.current.copy(
+                color = MaterialTheme.colors.onBackground
+            ),
             singleLine = true,
             cursorBrush = SolidColor(Color.Red),
             modifier = Modifier
@@ -72,7 +74,7 @@ fun SearchField(
                 Box {
                     if (textFieldValue.text.isEmpty()) {
                         Text(
-                            text = stringResource(R.string.search_field), // todo resources
+                            text = stringResource(R.string.search_field),
                         )
                     }
                     innerTextField()

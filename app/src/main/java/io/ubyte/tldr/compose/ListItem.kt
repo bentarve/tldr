@@ -3,6 +3,7 @@ package io.ubyte.tldr.compose
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -67,8 +68,8 @@ private fun PlatformBadge(platform: String) {
     Box(
         Modifier
             .clip(MaterialTheme.shapes.small)
-            .background(Color.DarkGray) // todo pick a color
-            .padding(horizontal = 6.dp)
+            .background(Color.DarkGray)
+            .padding(horizontal = 5.dp)
     ) {
         Text(
             text = platform,
