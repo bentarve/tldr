@@ -52,7 +52,7 @@ fun Search(
 }
 
 @Composable
-fun SearchField(
+private fun SearchField(
     viewModel: SearchViewModel
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -86,7 +86,7 @@ fun SearchField(
                 onClick = { textFieldValue = TextFieldValue() }
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Clear, // todo extract
+                    imageVector = Icons.Rounded.Clear,
                     contentDescription = stringResource(R.string.clear)
                 )
             }

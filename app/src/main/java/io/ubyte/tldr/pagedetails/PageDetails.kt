@@ -25,7 +25,7 @@ fun PageDetails(
                 navigationIcon = {
                     IconButton(onClick = { navigateUp() }) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack, // todo extract
+                            imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(R.string.navigate_back)
                         )
                     }
