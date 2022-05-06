@@ -17,6 +17,7 @@ import io.ubyte.tldr.R
 import io.ubyte.tldr.compose.Pages
 import io.ubyte.tldr.compose.SectionHeader
 import io.ubyte.tldr.compose.Toolbar
+import io.ubyte.tldr.model.PageItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -28,44 +29,52 @@ fun Home(
 ) {
     Column(Modifier.padding(horizontal = 8.dp)) {
         val uiState = viewModel.uiState
-        Crossfade(uiState) { state ->
-            SetupToolbar(state, openSearch)
-        }
+        SetupToolbar(uiState, openSearch)
         if (uiState is HomeViewState.Data) {
             Spacer(Modifier.height(32.dp))
-            Column {
-                SectionHeader(stringResource(R.string.frequent_pages))
-                Spacer(Modifier.height(16.dp))
-                Card(Modifier.fillMaxWidth()) {
-                    Pages(
-                        modifier = Modifier.padding(
-                            horizontal = 8.dp,
-                            vertical = 4.dp
-                        ),
-                        pages = uiState.pages,
-                        openPageDetails = openPageDetails
-                    )
-                }
-            }
+            FrequentPagesCard(uiState.pages, openPageDetails)
         } else {
-            Tldr()
+            DisplayAppName()
         }
     }
 }
 
 @Composable
-private fun SetupToolbar(state: HomeViewState, openSearch: () -> Unit) {
-    if (state == HomeViewState.Loading) {
-        Spacer(Modifier.height(Toolbar.height))
-    } else {
-        Toolbar(Modifier.clickable { openSearch() }) {
-            Text(stringResource(R.string.search_field))
+private fun FrequentPagesCard(
+    pages: List<PageItem>,
+    openPageDetails: (pageId: Long) -> Unit
+) {
+    Column {
+        SectionHeader(stringResource(R.string.frequent_pages))
+        Spacer(Modifier.height(16.dp))
+        Card(Modifier.fillMaxWidth()) {
+            Pages(
+                modifier = Modifier.padding(
+                    horizontal = 8.dp,
+                    vertical = 4.dp
+                ),
+                pages = pages,
+                openPageDetails = openPageDetails
+            )
         }
     }
 }
 
 @Composable
-private fun Tldr() {
+private fun SetupToolbar(uiState: HomeViewState, openSearch: () -> Unit) {
+    Crossfade(uiState) { state ->
+        if (state == HomeViewState.Loading) {
+            Spacer(Modifier.height(Toolbar.height))
+        } else {
+            Toolbar(Modifier.clickable { openSearch() }) {
+                Text(stringResource(R.string.search_field))
+            }
+        }
+    }
+}
+
+@Composable
+private fun DisplayAppName() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = BiasAlignment(0f, -0.4f)
