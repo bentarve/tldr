@@ -75,8 +75,8 @@ dependencies {
 
     implementation "androidx.activity:activity-compose:$rootProject.versions.activityCompose"
 
-    implementation "com.halilibo.compose-richtext:richtext-ui-material:0.11.0"
-    implementation "com.halilibo.compose-richtext:richtext-commonmark:0.11.0"
+    implementation "com.halilibo.compose-richtext:richtext-ui-material:$rootProject.versions.composeRichtext"
+    implementation "com.halilibo.compose-richtext:richtext-commonmark:$rootProject.versions.composeRichtext"
 
     implementation "androidx.hilt:hilt-navigation-compose:$rootProject.versions.hiltKtx"
     implementation "com.google.dagger:hilt-android:$rootProject.versions.daggerHilt"
@@ -91,7 +91,7 @@ dependencies {
     implementation "com.squareup.logcat:logcat:$rootProject.versions.logcat"
 
     testImplementation "junit:junit:$rootProject.versions.junit"
-    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.ext:junit:$rootProject.versions.androidxJunit"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.versions.compose"
     debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.versions.compose"
 }

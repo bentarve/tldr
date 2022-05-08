@@ -1,7 +1,7 @@
 package io.ubyte.tldr.store
 
-import com.squareup.sqldelight.runtime.coroutines.asFlow
-import com.squareup.sqldelight.runtime.coroutines.mapToList
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import io.ubyte.tldr.HistoryQueries
 import io.ubyte.tldr.PageQueries
 import io.ubyte.tldr.model.Page

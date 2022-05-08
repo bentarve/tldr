@@ -1,20 +1,22 @@
 buildscript {
     ext.versions = [
             gradle: '7.1.3',
-            kotlin: '1.5.31',
-            core: '1.9.0-alpha02',
-            appCompat: '1.6.0-alpha01',
-            material: '1.6.0-beta01',
+            kotlin: '1.6.20',
+            core: '1.9.0-alpha03',
+            appCompat: '1.6.0-alpha03',
+            material: '1.7.0-alpha01',
             lifecycle: '2.3.0',
             daggerHilt: '2.41',
             hiltKtx: '1.0.0',
-            compose: '1.2.0-alpha07',
-            activityCompose: '1.6.0-alpha01',
-            ktor: '2.0.0',
+            compose: '1.2.0-alpha08',
+            activityCompose: '1.6.0-alpha03',
+            ktor: '2.0.1',
             okio: '3.0.0',
-            sqldelight: '2.0.0-alpha01',
+            sqldelight: '2.0.0-alpha02',
             logcat: '0.1',
             junit: '4.13.2',
+            androidxJunit: '1.1.3',
+            composeRichtext: '0.11.0',
     ]
 
     repositories {
