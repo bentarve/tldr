@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'app.cash.sqldelight'
+    id "com.google.protobuf" version "0.8.18"
 }
 
 android {
@@ -82,6 +83,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$rootProject.versions.daggerHilt"
     kapt "com.google.dagger:hilt-compiler:$rootProject.versions.daggerHilt"
 
+    implementation  "androidx.datastore:datastore:1.0.0"
+    implementation  "com.google.protobuf:protobuf-javalite:3.20.1"
+
     implementation "io.ktor:ktor-client-core:$rootProject.versions.ktor"
     implementation "io.ktor:ktor-client-okhttp:$rootProject.versions.ktor"
 
@@ -90,8 +94,28 @@ dependencies {
     implementation "com.squareup.okio:okio:$rootProject.versions.okio"
     implementation "com.squareup.logcat:logcat:$rootProject.versions.logcat"
 
+    testImplementation "com.google.truth:truth:$rootProject.versions.truth"
+    androidTestImplementation "com.google.truth:truth:$rootProject.versions.truth"
     testImplementation "junit:junit:$rootProject.versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.versions.androidxJunit"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.versions.compose"
     debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.versions.compose"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.4"
+    }
+    // Generates the java Protobuf-lite code for the Protobufs in this project. See
+    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
+    // for more information.
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
+    }
 }
