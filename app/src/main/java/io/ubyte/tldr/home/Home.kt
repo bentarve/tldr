@@ -27,14 +27,15 @@ fun Home(
     openSearch: () -> Unit,
     openPageDetails: (pageId: Long) -> Unit
 ) {
-    Column(Modifier.padding(horizontal = 8.dp)) {
-        val uiState = viewModel.uiState
-        SetupToolbar(uiState, openSearch)
-        if (uiState is HomeViewState.Data) {
-            Spacer(Modifier.height(32.dp))
-            FrequentPagesCard(uiState.pages, openPageDetails)
-        } else {
-            DisplayAppName()
+    viewModel.uiState?.let { state ->
+        Column(Modifier.padding(horizontal = 8.dp)) {
+            SetupToolbar(state.showToolbar, openSearch)
+            if (state.showMostFrequent) {
+                Spacer(Modifier.height(32.dp))
+                FrequentPagesCard(state.pages, openPageDetails)
+            } else {
+                DisplayAppName()
+            }
         }
     }
 }
@@ -61,14 +62,14 @@ private fun FrequentPagesCard(
 }
 
 @Composable
-private fun SetupToolbar(uiState: HomeViewState, openSearch: () -> Unit) {
-    Crossfade(uiState) { state ->
-        if (state == HomeViewState.Loading) {
-            Spacer(Modifier.height(Toolbar.height))
-        } else {
+private fun SetupToolbar(showToolbar: Boolean, openSearch: () -> Unit) {
+    Crossfade(showToolbar) { toolbar ->
+        if (toolbar) {
             Toolbar(Modifier.clickable { openSearch() }) {
                 Text(stringResource(R.string.search_field))
             }
+        } else {
+            Spacer(Modifier.height(Toolbar.height))
         }
     }
 }
@@ -86,7 +87,7 @@ private fun DisplayAppName() {
                     text = stringResource(R.string.app_name),
                     style = style
                 )
-                BlinkingCursor(style)
+                TextCursor(style)
             }
             Spacer(Modifier.padding(16.dp))
             Text(
@@ -98,7 +99,7 @@ private fun DisplayAppName() {
 }
 
 @Composable
-private fun BlinkingCursor(
+private fun TextCursor(
     textStyle: TextStyle
 ) {
     var cursor by remember { mutableStateOf(" ") }
