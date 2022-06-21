@@ -72,7 +72,8 @@ class PageSynchronizer @Inject constructor(
     private suspend fun checkForUpdates(): Boolean {
         try {
             val lastSync = Instant.ofEpochSecond(settingsStore.getLastSync())
-            val duration = Duration.between(Instant.now(), lastSync).toDays()
+            val duration = Duration.between(lastSync, Instant.now()).toDays()
+
             if (duration > 45) return true
         } catch (e: Exception) {
             logcat(LogPriority.WARN) { "Could not read last synchronization" }
