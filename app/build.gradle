@@ -76,8 +76,7 @@ dependencies {
 
     implementation "androidx.activity:activity-compose:$rootProject.versions.activityCompose"
 
-    implementation "com.halilibo.compose-richtext:richtext-ui-material:$rootProject.versions.composeRichtext"
-    implementation "com.halilibo.compose-richtext:richtext-commonmark:$rootProject.versions.composeRichtext"
+    implementation "org.commonmark:commonmark:$rootProject.versions.commonmark"
 
     implementation "androidx.hilt:hilt-navigation-compose:$rootProject.versions.hiltKtx"
     implementation "com.google.dagger:hilt-android:$rootProject.versions.daggerHilt"

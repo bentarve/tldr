@@ -16,7 +16,7 @@ buildscript {
             logcat: '0.1',
             junit: '4.13.2',
             androidxJunit: '1.1.3',
-            composeRichtext: '0.11.0',
+            commonmark: '0.18.1',
             truth: '1.1.3'
     ]
 
