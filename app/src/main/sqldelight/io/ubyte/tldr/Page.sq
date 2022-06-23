@@ -45,7 +45,7 @@ ORDER BY
     WHEN name LIKE ?1 || '%' THEN 2
     ELSE 3
   END ASC
-LIMIT 10;
+LIMIT 8;
 
 mostRecent:
 SELECT DISTINCT
@@ -55,7 +55,7 @@ SELECT DISTINCT
 FROM page
 JOIN history ON (history.pageId == page.id)
 ORDER BY history.id DESC
-LIMIT 7;
+LIMIT 8;
 
 mostFrequent:
 SELECT
@@ -66,7 +66,7 @@ FROM page
 JOIN history ON (history.pageId == page.id)
 GROUP BY (history.pageId)
 ORDER BY COUNT(history.id) DESC
-LIMIT 10;
+LIMIT 8;
 
 deletePageIds:
 DELETE FROM page
