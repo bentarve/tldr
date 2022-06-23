@@ -26,9 +26,9 @@ class SearchViewModel @Inject constructor(
     fun querySearch(term: String) {
         if (term.isNotEmpty()) {
             viewModelScope.launch {
-                store.queryPages(term).collect { pages ->
-                    uiState = if (pages.isNotEmpty()) {
-                        mergeResults(pages)
+                store.queryPages(term).collect { queryPages ->
+                    uiState = if (queryPages.isNotEmpty()) {
+                        SearchResult(queryPages mergeWith recentPages)
                     } else {
                         NoResult
                     }
@@ -40,12 +40,10 @@ class SearchViewModel @Inject constructor(
     }
 
     // Merges query pages and recent pages to one list
-    private fun mergeResults(pages: List<PageIdentifier>): SearchResult {
-        val searchResult = pages.map { page ->
-            PageItem(page, Icon.SEARCH_RESULT)
-        }
+    private infix fun List<PageIdentifier>.mergeWith(recentPages: List<PageItem>): List<PageItem> {
+        val searchResult = this.map { page -> PageItem(page, Icon.SEARCH_RESULT) }
         val diff = 10 - searchResult.size.coerceAtMost(10)
-        return SearchResult(searchResult + recentPages.take(diff))
+        return searchResult + recentPages.take(diff)
     }
 
     init {
