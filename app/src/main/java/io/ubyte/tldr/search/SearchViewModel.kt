@@ -20,7 +20,7 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
     private var recentPages by mutableStateOf<List<PageItem>>(emptyList())
 
-    var uiState by mutableStateOf<SearchViewState>(RecentPages(emptyList()))
+    var uiState by mutableStateOf<SearchViewState>(SearchResult(emptyList()))
         private set
 
     fun querySearch(term: String) {
@@ -54,7 +54,7 @@ class SearchViewModel @Inject constructor(
                 recentPages = pages.map { page ->
                     PageItem(page, Icon.RECENT_PAGE)
                 }.also {
-                    uiState = RecentPages(it)
+                    uiState = SearchResult(it)
                 }
             }
         }

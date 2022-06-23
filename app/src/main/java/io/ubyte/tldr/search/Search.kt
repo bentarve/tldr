@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.ubyte.tldr.R
 import io.ubyte.tldr.compose.Pages
 import io.ubyte.tldr.compose.Toolbar
@@ -32,13 +31,6 @@ fun Search(
         when (val result = viewModel.uiState) {
             is SearchViewState.NoResult -> {
                 Text(text = stringResource(R.string.no_result))
-            }
-            is SearchViewState.RecentPages -> {
-                Pages(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    pages = result.pages,
-                    openPageDetails = openPageDetails
-                )
             }
             is SearchViewState.SearchResult -> {
                 Pages(
