@@ -17,6 +17,7 @@ import logcat.LogPriority
 import logcat.logcat
 import org.commonmark.node.*
 import org.commonmark.parser.Parser
+import java.util.*
 import javax.inject.Inject
 
 class MarkdownParser @Inject constructor(
@@ -39,19 +40,13 @@ class MarkdownParser @Inject constructor(
 
 private class StyleVisitor(private val builder: AnnotatedString.Builder) : AbstractVisitor() {
     override fun visit(text: Text) {
-        if (text.literal == "." || text.literal.startsWith("More info")) return
-
-        if (text.parent.parent is BlockQuote) {
-            builder.withStyle(Yellow) {
-                appendLine(text.literal)
-            }
-        } else {
-            builder.withStyle(Green) {
-                appendLine(
-                    text.literal.replace("[", "")
-                        .replace("]", "")
-                        .trim()
-                )
+        with(text) {
+            when {
+                literal.startsWith("More info") -> next.unlink().also { return }
+                literal.startsWith("See also") -> append(literal, Yellow)
+                literal.endsWith(".") -> appendLine(literal, Yellow)
+                literal.endsWith(":") -> appendLine(removeSymbols(literal), Green)
+                else -> append(literal, Green)
             }
         }
     }
@@ -70,7 +65,9 @@ private class StyleVisitor(private val builder: AnnotatedString.Builder) : Abstr
                 }
                 if (index < strings.size - 1) append(" ")
             }
-        }.also { annotatedString -> builder.appendLine(annotatedString) }
+        }.also { annotatedString ->
+            if (strings.size == 1) builder.append(annotatedString) else builder.appendLine(annotatedString)
+        }
     }
 
     override fun visit(bulletList: BulletList?) {
@@ -81,6 +78,19 @@ private class StyleVisitor(private val builder: AnnotatedString.Builder) : Abstr
     override fun visit(heading: Heading?) {}
 
     override fun visit(link: Link?) {}
+
+    private fun removeSymbols(text: String) = text
+        .replace("[", "")
+        .replace("]", "")
+        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+
+    private fun appendLine(text: String, style: SpanStyle) {
+        builder.withStyle(style) { appendLine(text) }
+    }
+
+    private fun append(text: String, style: SpanStyle) {
+        builder.withStyle(style) { append(text) }
+    }
 }
 
 private object Style {
