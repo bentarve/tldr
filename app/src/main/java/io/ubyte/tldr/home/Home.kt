@@ -48,7 +48,10 @@ private fun FrequentPagesCard(
     Column {
         SectionHeader(stringResource(R.string.frequent_pages))
         Spacer(Modifier.height(16.dp))
-        Card(Modifier.fillMaxWidth()) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = 4.dp
+        ) {
             Pages(
                 modifier = Modifier.padding(
                     horizontal = 8.dp,
