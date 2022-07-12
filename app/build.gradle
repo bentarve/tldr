@@ -76,8 +76,6 @@ dependencies {
 
     implementation "androidx.activity:activity-compose:$rootProject.versions.activityCompose"
 
-    implementation "org.commonmark:commonmark:$rootProject.versions.commonmark"
-
     implementation "androidx.hilt:hilt-navigation-compose:$rootProject.versions.hiltKtx"
     implementation "com.google.dagger:hilt-android:$rootProject.versions.daggerHilt"
     kapt "com.google.dagger:hilt-compiler:$rootProject.versions.daggerHilt"

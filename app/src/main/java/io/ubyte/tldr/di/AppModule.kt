@@ -17,7 +17,6 @@ import io.ubyte.tldr.PageQueries
 import io.ubyte.tldr.util.AppCoroutineDispatchers
 import kotlinx.coroutines.Dispatchers
 import okio.FileSystem
-import org.commonmark.parser.Parser
 import javax.inject.Singleton
 
 @Module
@@ -56,11 +55,5 @@ object AppModule {
     @Provides
     fun provideHistoryQueries(database: Database): HistoryQueries {
         return database.historyQueries
-    }
-
-    @Singleton
-    @Provides
-    fun provideParser(): Parser {
-        return Parser.builder().build()
     }
 }
