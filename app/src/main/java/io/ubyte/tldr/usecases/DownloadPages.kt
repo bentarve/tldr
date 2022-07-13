@@ -12,7 +12,6 @@ import okio.Path.Companion.toPath
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 @Suppress("BlockingMethodInNonBlockingContext")
 class DownloadPages @Inject constructor(
     private val fileSystem: FileSystem,
@@ -25,6 +24,7 @@ class DownloadPages @Inject constructor(
                 FILE_NAME).toPath()
 
         fileSystem.write(temporaryFile) {
+            // note: cannot use http client after closed.
             httpClient.use { client ->
                 client.get(ZIP_ASSET_URL)
                     .bodyAsChannel()
