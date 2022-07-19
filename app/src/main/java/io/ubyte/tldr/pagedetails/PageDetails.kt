@@ -1,6 +1,9 @@
 package io.ubyte.tldr.pagedetails
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -18,30 +21,30 @@ fun PageDetails(
     viewModel: PageDetailsViewModel,
     navigateUp: () -> Unit
 ) {
-    with(viewModel.uiState) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    elevation = 0.dp,
-                    title = { Text(text = name) },
-                    navigationIcon = {
-                        IconButton(onClick = { navigateUp() }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = stringResource(R.string.navigate_back)
-                            )
-                        }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                elevation = 0.dp,
+                title = { Text(text = viewModel.uiState.pageName) },
+                navigationIcon = {
+                    IconButton(onClick = { navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.navigate_back)
+                        )
                     }
-                )
-            }
-        ) { innerPadding ->
-            content?.let { annotatedString ->
-                Text(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .padding(8.dp),
-                    text = annotatedString
-                )
+                }
+            )
+        }
+    ) { innerPadding ->
+        viewModel.uiState.pageContent?.let { markdown ->
+            Column(
+                Modifier
+                    .padding(innerPadding)
+                    .padding(horizontal = 8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Text(markdown)
             }
         }
     }

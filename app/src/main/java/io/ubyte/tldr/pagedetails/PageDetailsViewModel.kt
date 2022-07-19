@@ -36,8 +36,8 @@ class PageDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             queryPage()?.let { page ->
                 uiState = PageDetailsViewState(
-                    name = page.name,
-                    content = parser(page.markdown)
+                    pageName = page.name,
+                    pageContent = parser(page.markdown)
                 )
             }
         }
