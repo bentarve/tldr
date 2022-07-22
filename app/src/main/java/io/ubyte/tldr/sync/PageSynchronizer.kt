@@ -52,7 +52,7 @@ class PageSynchronizer @Inject constructor(
         }
 
         try {
-            store.updatePages(pages)
+            store.persistPages(pages)
         } catch (e: Exception) {
             logcat(LogPriority.WARN) { "Could not save pages" }
             return false

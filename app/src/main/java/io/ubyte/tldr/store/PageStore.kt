@@ -18,7 +18,23 @@ class PageStore @Inject constructor(
     private val history: HistoryQueries,
     private val dispatchers: AppCoroutineDispatchers
 ) {
-    suspend fun updatePages(pages: List<Page>) = withContext(dispatchers.io) {
+    suspend fun persistPages(pages: List<Page>) = withContext(dispatchers.io) {
+        if (db.count().executeAsOne() == 0L) {
+            insertPages(pages)
+        } else {
+            updatePages(pages)
+        }
+    }
+
+    private fun insertPages(pages: List<Page>) {
+        db.transaction {
+            pages.forEach {
+                db.insertPage(it.name, it.platform, it.markdown)
+            }
+        }
+    }
+
+    private fun updatePages(pages: List<Page>) {
         db.transaction {
             val ids = db.findAllPageIds().executeAsList().toMutableSet()
 
@@ -52,7 +68,7 @@ class PageStore @Inject constructor(
     fun queryMostFrequent() = db.mostFrequent(::mapToPageIdentifier)
         .asFlow().mapToList(dispatchers.io)
 
-    suspend fun count(): Long = withContext(dispatchers.io) {
+    suspend fun count() = withContext(dispatchers.io) {
         db.count().executeAsOne()
     }
 }
