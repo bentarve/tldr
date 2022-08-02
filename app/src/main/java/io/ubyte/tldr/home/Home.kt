@@ -81,7 +81,7 @@ private fun SetupToolbar(showToolbar: Boolean, openSearch: () -> Unit) {
 private fun DisplayAppName() {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = BiasAlignment(0f, -0.4f)
+        contentAlignment = BiasAlignment(0f, -0.2f)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Row {
