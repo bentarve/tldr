@@ -8,14 +8,15 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
         applicationId "io.ubyte.tldr"
-        minSdk 26
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
+
+        versionCode buildConfig.version.code
+        versionName buildConfig.version.name
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -81,8 +82,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$rootProject.versions.daggerHilt"
     kapt "com.google.dagger:hilt-compiler:$rootProject.versions.daggerHilt"
 
-    implementation  "androidx.datastore:datastore:1.0.0"
-    implementation  "com.google.protobuf:protobuf-javalite:3.20.1"
+    implementation "androidx.datastore:datastore:1.0.0"
+    implementation "com.google.protobuf:protobuf-javalite:3.20.1"
 
     implementation "io.ktor:ktor-client-core:$rootProject.versions.ktor"
     implementation "io.ktor:ktor-client-okhttp:$rootProject.versions.ktor"
