@@ -4,7 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'app.cash.sqldelight'
-    id "com.google.protobuf" version "0.8.18"
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -39,11 +39,6 @@ android {
 
     kotlinOptions {
         allWarningsAsErrors = false
-        useIR = true
-
-        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
-        freeCompilerArgs += '-Xopt-in=okio.ExperimentalFileSystem'
-
         jvmTarget = '1.8'
     }
 
@@ -52,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion rootProject.versions.compose
+        kotlinCompilerExtensionVersion libs.versions.androidxCompose.get()
     }
 
     packagingOptions {
@@ -67,47 +62,33 @@ android {
 }
 
 dependencies {
-    implementation "androidx.core:core-ktx:$rootProject.versions.core"
-    implementation "androidx.appcompat:appcompat:$rootProject.versions.appCompat"
-    implementation "com.google.android.material:material:$rootProject.versions.material"
+    implementation libs.androidx.activity.compose
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.compose.material
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.datastore.core
 
-    implementation "androidx.compose.compiler:compiler:$rootProject.versions.compose"
-    implementation "androidx.compose.ui:ui:$rootProject.versions.compose"
-    implementation "androidx.compose.material:material:$rootProject.versions.compose"
-    implementation "androidx.compose.ui:ui-tooling-preview:$rootProject.versions.compose"
+    implementation libs.androidx.hilt.navigation.compose
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
 
-    implementation "androidx.activity:activity-compose:$rootProject.versions.activityCompose"
+    implementation libs.ktor.client.core
+    implementation libs.ktor.client.okhttp
+    implementation libs.logcat
+    implementation libs.okio
+    implementation libs.protobuf.java.lite
+    implementation libs.sqldelight.android.driver
+    implementation libs.sqldelight.coroutines
 
-    implementation "androidx.hilt:hilt-navigation-compose:$rootProject.versions.hiltKtx"
-    implementation "com.google.dagger:hilt-android:$rootProject.versions.daggerHilt"
-    kapt "com.google.dagger:hilt-compiler:$rootProject.versions.daggerHilt"
-
-    implementation "androidx.datastore:datastore:1.0.0"
-    implementation "com.google.protobuf:protobuf-javalite:3.20.1"
-
-    implementation "io.ktor:ktor-client-core:$rootProject.versions.ktor"
-    implementation "io.ktor:ktor-client-okhttp:$rootProject.versions.ktor"
-
-    implementation "app.cash.sqldelight:android-driver:$rootProject.versions.sqldelight"
-    implementation "app.cash.sqldelight:coroutines-extensions-jvm:$rootProject.versions.sqldelight"
-    implementation "com.squareup.okio:okio:$rootProject.versions.okio"
-    implementation "com.squareup.logcat:logcat:$rootProject.versions.logcat"
-
-    testImplementation "com.google.truth:truth:$rootProject.versions.truth"
-    androidTestImplementation "com.google.truth:truth:$rootProject.versions.truth"
-    testImplementation "junit:junit:$rootProject.versions.junit"
-    androidTestImplementation "androidx.test.ext:junit:$rootProject.versions.androidxJunit"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$rootProject.versions.compose"
-    debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.versions.compose"
+    testImplementation libs.junit4
+    androidTestImplementation libs.androidx.compose.ui.test
+    androidTestImplementation libs.truth
 }
 
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.19.4"
     }
-    // Generates the java Protobuf-lite code for the Protobufs in this project. See
-    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
-    // for more information.
     generateProtoTasks {
         all().each { task ->
             task.builtins {
