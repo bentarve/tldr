@@ -58,14 +58,10 @@ fun Search(
 }
 
 @Composable
-private fun SearchField(
-    viewModel: SearchViewModel
-) {
+private fun SearchField(viewModel: SearchViewModel) {
     val focusRequester = remember { FocusRequester() }
     var textFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(
-            TextFieldValue()
-        )
+        mutableStateOf(TextFieldValue())
     }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -86,10 +82,7 @@ private fun SearchField(
                 }
             }
         )
-
-        ClearTextButton(textFieldValue.text) {
-            textFieldValue = TextFieldValue()
-        }
+        ClearTextButton(textFieldValue.text) { textFieldValue = TextFieldValue() }
     }
 
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
@@ -99,9 +92,7 @@ private fun SearchField(
 @Composable
 fun ClearTextButton(text: String, onClick: () -> Unit) {
     if (text.isNotEmpty()) {
-        IconButton(
-            onClick = { onClick() }
-        ) {
+        IconButton(onClick = { onClick() }) {
             Icon(
                 imageVector = Icons.Rounded.Clear,
                 contentDescription = stringResource(R.string.clear)

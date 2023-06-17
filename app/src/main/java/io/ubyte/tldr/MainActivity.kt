@@ -72,10 +72,12 @@ private fun TldrNavHost(navController: NavHostController) {
 }
 
 private fun navigateToPageDetails(navController: NavController, pageId: Long) {
-    navController.navigate("$PAGES_ROUTE/$pageId")
+    navController.navigate(PAGES_ROUTE with pageId)
 }
 
+// The route must be specified with { }, navigating to the destination does not
 private infix fun String.with(argument: String) = "$this/{$argument}"
+private infix fun String.with(argument: Long) = "$this/$argument"
 
 object Destinations {
     const val HOME_ROUTE = "home"
