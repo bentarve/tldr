@@ -1,16 +1,17 @@
 package io.ubyte.tldr.search
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ubyte.tldr.model.Icon
 import io.ubyte.tldr.model.PageIdentifier
 import io.ubyte.tldr.model.PageItem
-import io.ubyte.tldr.search.SearchViewState.*
+import io.ubyte.tldr.search.SearchViewState.NoResult
+import io.ubyte.tldr.search.SearchViewState.SearchResult
 import io.ubyte.tldr.store.PageStore
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,43 +19,44 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val store: PageStore
 ) : ViewModel() {
-    private var recentPages by mutableStateOf<List<PageItem>>(emptyList())
+    private val recentPages = MutableStateFlow<List<PageItem>>(emptyList())
 
-    var uiState by mutableStateOf<SearchViewState>(SearchResult(emptyList()))
-        private set
+    private val _uiState = MutableStateFlow<SearchViewState>(SearchResult(emptyList()))
+    val uiState = _uiState.asStateFlow()
 
-    fun querySearch(term: String) {
-        if (term.isNotEmpty()) {
-            viewModelScope.launch {
-                store.queryPages(term).collect { queryPages ->
-                    uiState = if (queryPages.isNotEmpty()) {
-                        SearchResult(queryPages mergeWith recentPages)
-                    } else {
-                        NoResult
-                    }
+    fun querySearch(term: String) = viewModelScope.launch {
+        if (term.isEmpty()) {
+            _uiState.update { SearchResult(recentPages.value) }
+        } else {
+            store.queryPages(term).collect { queryPages ->
+                if (queryPages.isEmpty()) {
+                    _uiState.update { NoResult }
+                } else {
+                    _uiState.update { SearchResult(queryPages mergeWith recentPages.value) }
                 }
             }
-        } else {
-            uiState = SearchResult(recentPages)
         }
     }
 
     // Merges query pages and recent pages to one list
     private infix fun List<PageIdentifier>.mergeWith(recentPages: List<PageItem>): List<PageItem> {
         val searchResult = this.map { page -> PageItem(page, Icon.SEARCH_RESULT) }
-        val diff = 8 - searchResult.size.coerceAtMost(8)
+        val diff = MAX_LIST_ITEMS - searchResult.size.coerceAtMost(MAX_LIST_ITEMS)
         return searchResult + recentPages.take(diff)
     }
 
     init {
         viewModelScope.launch {
             store.queryMostRecent().collect { pages ->
-                recentPages = pages.map { page ->
-                    PageItem(page, Icon.RECENT_PAGE)
-                }.also {
-                    uiState = SearchResult(it)
+                recentPages.update {
+                    pages.map { page ->
+                        PageItem(page, Icon.RECENT_PAGE)
+                    }
                 }
+                _uiState.update { SearchResult(recentPages.value) }
             }
         }
     }
 }
+
+private const val MAX_LIST_ITEMS = 8
