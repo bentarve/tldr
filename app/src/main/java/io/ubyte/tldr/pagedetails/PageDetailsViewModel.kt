@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ubyte.tldr.Destinations.PAGE_ID
+import io.ubyte.tldr.Pages
 import io.ubyte.tldr.pagedetails.PageDetailsViewState.PageDetails
 import io.ubyte.tldr.pagedetails.PageDetailsViewState.QueryError
 import io.ubyte.tldr.store.PageStore
@@ -26,19 +26,19 @@ class PageDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<PageDetailsViewState>(PageDetails())
     val uiState = _uiState.asStateFlow()
 
-    private val pageId: Long? = navArgs[PAGE_ID]
+    private val pageId: Long? = navArgs[Pages.pageArg]
 
     private suspend fun queryPage() {
         try {
             requireNotNull(pageId)
             val page = store.queryPage(pageId)
             val pageContent = parser(page.markdown).also { require(it.isNotEmpty()) }
-                _uiState.update {
-                    PageDetails(
-                        pageName = page.name,
-                        pageContent = pageContent
-                    )
-                }
+            _uiState.update {
+                PageDetails(
+                    pageName = page.name,
+                    pageContent = pageContent
+                )
+            }
         } catch (e: Exception) {
             val errorMessage = "Could not query page"
             _uiState.update { QueryError(errorMessage) }
