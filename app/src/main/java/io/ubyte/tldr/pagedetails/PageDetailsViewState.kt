@@ -2,7 +2,11 @@ package io.ubyte.tldr.pagedetails
 
 import androidx.compose.ui.text.AnnotatedString
 
-data class PageDetailsViewState(
-    val pageName: String = "",
-    val pageContent: AnnotatedString? = null
-)
+sealed interface PageDetailsViewState{
+    data class PageDetails(
+        val pageName: String = "",
+        val pageContent: AnnotatedString = AnnotatedString("")
+    ) : PageDetailsViewState
+
+    data class QueryError(val message: String) : PageDetailsViewState
+}
