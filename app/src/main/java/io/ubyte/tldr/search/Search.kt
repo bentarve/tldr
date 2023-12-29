@@ -90,7 +90,7 @@ private fun SearchField(viewModel: SearchViewModel) {
 }
 
 @Composable
-fun ClearTextButton(text: String, onClick: () -> Unit) {
+private fun ClearTextButton(text: String, onClick: () -> Unit) {
     if (text.isNotEmpty()) {
         IconButton(onClick = { onClick() }) {
             Icon(
