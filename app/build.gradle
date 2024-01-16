@@ -33,7 +33,7 @@ android {
         }
         debug {
             manifestPlaceholders = [ appName:"tldr.debug"]
-            applicationIdSuffix '.bug'
+            applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             debuggable true
         }
