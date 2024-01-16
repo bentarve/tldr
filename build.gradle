@@ -1,8 +1,8 @@
 buildscript {
     ext.buildConfig = [
-            'compileSdk': 33,
+            'compileSdk': 34,
             'minSdk'    : 26,
-            'targetSdk' : 33,
+            'targetSdk' : 34,
 
             'version'   : [
                     'major': 0,
@@ -19,10 +19,10 @@ buildscript {
     }
 
     dependencies {
-        classpath libs.android.gradlePlug
-        classpath libs.kotlin.gradlePlug
-        classpath libs.hilt.gradlePlug
-        classpath libs.sqldelight.gradlePlug
+        classpath libs.android.gradlePlugin
+        classpath libs.kotlin.gradlePlugin
+        classpath libs.hilt.gradlePlugin
+        classpath libs.sqldelight.gradlePlugin
     }
 }
 

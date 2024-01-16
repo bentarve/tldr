@@ -66,6 +66,7 @@ android {
     kapt {
         correctErrorTypes true
     }
+    namespace 'io.ubyte.tldr'
 }
 
 dependencies {
@@ -94,7 +95,7 @@ dependencies {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:3.19.4"
+        artifact = "com.google.protobuf:protoc:3.24.1"
     }
     generateProtoTasks {
         all().each { task ->
