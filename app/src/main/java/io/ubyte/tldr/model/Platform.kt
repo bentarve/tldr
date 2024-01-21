@@ -28,5 +28,3 @@ enum class Platform {
         }
     }
 }
-
-
