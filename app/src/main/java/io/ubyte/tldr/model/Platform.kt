@@ -9,9 +9,7 @@ enum class Platform {
     Android;
 
     companion object {
-        fun allPlatforms() = entries.toSet().toRegex()
-
-        fun formatFromLowercase(platform: String): String? {
+        fun formatNames(platform: String): String? {
             return when (platform) {
                 Common.name.lowercase() -> Common.name
                 Linux.name.lowercase() -> Linux.name
@@ -22,9 +20,13 @@ enum class Platform {
                 else -> null
             }
         }
+
+        fun allPlatforms() = entries.toSet().toRegex()
+
+        private fun Set<Platform>.toRegex(): Regex {
+            return joinToString(separator = "|") { it.name }.toRegex(RegexOption.IGNORE_CASE)
+        }
     }
 }
 
-fun Set<Platform>.toRegex(): Regex {
-    return joinToString(separator = "|") { it.name }.toRegex(RegexOption.IGNORE_CASE)
-}
+

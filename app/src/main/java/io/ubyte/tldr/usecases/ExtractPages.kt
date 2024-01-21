@@ -22,7 +22,7 @@ class ExtractPages @Inject constructor(
         val zipFile = fileSystem.openZip(path)
 
         fun toPage(path: Path): Page {
-            val platform = path.parent?.name?.let { Platform.formatFromLowercase(it) }
+            val platform = path.parent?.name?.let { Platform.formatNames(it) }
             val pageContent = zipFile.read(path) { readUtf8().trim() }
 
             return Page(
