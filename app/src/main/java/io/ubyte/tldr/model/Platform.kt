@@ -9,7 +9,7 @@ enum class Platform {
     Android;
 
     companion object {
-        fun allPlatforms() = values().toSet().toRegex()
+        fun allPlatforms() = entries.toSet().toRegex()
 
         fun formatFromLowercase(platform: String): String? {
             return when (platform) {
