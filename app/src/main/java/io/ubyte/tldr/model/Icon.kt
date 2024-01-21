@@ -10,7 +10,7 @@ enum class Icon(
     val imageVector: ImageVector,
     val description: String
 ) {
-    RECENT_PAGE(Icons.Rounded.History, "Recently visited page"),
-    FREQUENT_PAGE(Icons.Rounded.LabelImportant, "Frequently visited page"),
-    SEARCH_RESULT(Icons.Rounded.Search, "Search Result")
+    RecentPage(Icons.Rounded.History, "Recently visited page"),
+    FrequentPage(Icons.Rounded.LabelImportant, "Frequently visited page"),
+    SearchResult(Icons.Rounded.Search, "Search Result")
 }

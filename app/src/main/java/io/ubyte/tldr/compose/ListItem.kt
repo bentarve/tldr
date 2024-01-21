@@ -51,7 +51,7 @@ fun ListItem(
                     }
                 }
             }
-            if (icon != Icon.FREQUENT_PAGE) {
+            if (icon != Icon.FrequentPage) {
                 Icon(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     imageVector = Icons.Rounded.NorthWest,

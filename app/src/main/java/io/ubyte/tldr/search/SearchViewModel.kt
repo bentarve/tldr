@@ -40,7 +40,7 @@ class SearchViewModel @Inject constructor(
 
     // Merge query pages and recent pages to one list
     private infix fun List<PageIdentifier>.mergeWith(recentPages: List<PageItem>): List<PageItem> {
-        val searchResult = this.map { page -> PageItem(page, Icon.SEARCH_RESULT) }
+        val searchResult = this.map { page -> PageItem(page, Icon.SearchResult) }
         val diff = MAX_LIST_ITEMS - searchResult.size.coerceAtMost(MAX_LIST_ITEMS)
         return searchResult + recentPages.take(diff)
     }
@@ -50,7 +50,7 @@ class SearchViewModel @Inject constructor(
             store.queryMostRecent().collect { pages ->
                 recentPages.update {
                     pages.map { page ->
-                        PageItem(page, Icon.RECENT_PAGE)
+                        PageItem(page, Icon.RecentPage)
                     }
                 }
                 _uiState.update { SearchResult(recentPages.value) }
