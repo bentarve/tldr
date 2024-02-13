@@ -36,18 +36,36 @@ class PageStore @Inject constructor(
 
     private fun updatePages(pages: List<Page>) {
         db.transaction {
-            val ids = db.findAllPageIds().executeAsList().toMutableSet()
+            val existingPages = db.findAllPages().executeAsList()
+            val existingPageMap = existingPages.associateBy { it.name + it.platform }
+
+            val pagesToUpdate = mutableListOf<Page>()
+            val pagesToInsert = mutableListOf<Page>()
+
+            val pagesToDelete = existingPages.map { it.id }.toMutableSet()
 
             for (page in pages) {
-                db.updatePage(page.name, page.platform, page.markdown)
-                if (db.changes().executeAsOne() != 0L) {
-                    ids -= db.findPageId(page.name, page.platform).executeAsOne()
+                val existingPage = existingPageMap[page.name + page.platform]
+
+                if (existingPage != null) {
+                    if (existingPage.markdown != page.markdown) {
+                        pagesToUpdate.add(page)
+                    }
+                    pagesToDelete.remove(existingPage.id)
                 } else {
-                    db.insertPage(page.name, page.platform, page.markdown)
+                    pagesToInsert.add(page)
                 }
             }
 
-            ids.chunked(999).forEach {
+            pagesToUpdate.forEach { page ->
+                db.updatePage(page.name, page.platform, page.markdown)
+            }
+
+            pagesToInsert.forEach { page ->
+                db.insertPage(page.name, page.platform, page.markdown)
+            }
+
+            pagesToDelete.chunked(999).forEach {
                 db.deletePageIds(it)
             }
         }

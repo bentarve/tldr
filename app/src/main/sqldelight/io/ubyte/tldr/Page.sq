@@ -26,8 +26,8 @@ FROM page
 WHERE name = ?1
   AND platform = ?2;
 
-findAllPageIds:
-SELECT id
+findAllPages:
+SELECT id, name, platform, markdown
 FROM page;
 
 findPageById:
@@ -71,9 +71,6 @@ LIMIT 8;
 deletePageIds:
 DELETE FROM page
 WHERE id IN ?;
-
-changes:
-SELECT changes();
 
 count:
 SELECT COUNT(id) FROM page;
