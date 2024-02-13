@@ -10,7 +10,6 @@ import okio.Path.Companion.toPath
 import okio.openZip
 import javax.inject.Inject
 
-@Suppress("BlockingMethodInNonBlockingContext")
 class ExtractPages @Inject constructor(
     private val fileSystem: FileSystem,
     private val dispatchers: AppCoroutineDispatchers
@@ -26,7 +25,7 @@ class ExtractPages @Inject constructor(
             val pageContent = zipFile.read(path) { readUtf8().trim() }
 
             return Page(
-                name = pageContent.substringBefore("\n").removePrefix("#").trim(),
+                name = path.toString().substringAfterLast("/").removeSuffix(".md"),
                 platform = requireNotNull(platform),
                 markdown = pageContent
             )
