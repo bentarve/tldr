@@ -31,15 +31,9 @@ class ExtractPages @Inject constructor(
             )
         }
 
-        return@withContext zipFile.list(ROOT.toPath())
+        return@withContext zipFile.list("/".toPath())
             .filter { it.name matches selectedPlatforms }
             .flatMap(zipFile::list)
             .map(::toPage)
     }
 }
-
-/*
-* all supported languages: "/"
-* english only: "/pages"
-* */
-private const val ROOT = "/pages"
