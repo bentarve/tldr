@@ -20,12 +20,6 @@ SET name = ?1,
 WHERE name = ?1
   AND platform = ?2;
 
-findPageId:
-SELECT id
-FROM page
-WHERE name = ?1
-  AND platform = ?2;
-
 findAllPages:
 SELECT id, name, platform, markdown
 FROM page;
