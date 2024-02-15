@@ -45,7 +45,7 @@ fun ListItem(
                         text = page.name,
                         style = MaterialTheme.typography.h3
                     )
-                    if (page.platform != "Common") {
+                    if (page.platform != "common") {
                         Spacer(Modifier.width(20.dp))
                         PlatformBadge(page.platform)
                     }
