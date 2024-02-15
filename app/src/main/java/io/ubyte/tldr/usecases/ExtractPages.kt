@@ -16,7 +16,6 @@ class ExtractPages @Inject constructor(
 ) {
     suspend operator fun invoke(
         path: Path,
-        selectedPlatforms: Regex = Platform.allPlatforms()
     ): List<Page> = withContext(dispatchers.io) {
         val zipFile = fileSystem.openZip(path)
 
@@ -32,7 +31,6 @@ class ExtractPages @Inject constructor(
         }
 
         return@withContext zipFile.list("/".toPath())
-            .filter { it.name matches selectedPlatforms }
             .flatMap(zipFile::list)
             .map(::toPage)
     }
