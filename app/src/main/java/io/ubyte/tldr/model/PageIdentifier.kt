@@ -7,6 +7,20 @@ data class PageIdentifier(
 ) {
     companion object {
         fun mapToPageIdentifier(id: Long, name: String, platform: String) =
-            PageIdentifier(id, name, platform)
+            PageIdentifier(id, name, formatNames(platform))
+
+        private fun formatNames(platform: String): String {
+            return when (platform) {
+                "linux" -> "Linux"
+                "osx" -> "OSX"
+                "sunos" -> "SunOS"
+                "windows" -> "Windows"
+                "android" -> "Android"
+                "freebsd" -> "FreeBSD"
+                "netbsd" -> "NetBSD"
+                "openbsd" -> "OpenBSD"
+                else -> platform
+            }
+        }
     }
 }
